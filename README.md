@@ -26,6 +26,31 @@ Cycles the quotes around the cursor with `cmd+'` (`ctrl+'` on Windows and Linux)
 | `vscodeTools.toggleQuotes.enabled` | `true`        | Enable the command.                                                                                                                                                    |
 | `vscodeTools.toggleQuotes.chars`   | `["\"", "'"]` | Characters to cycle. Entries are a character or a [begin, end] pair. Language overridable; backtick is added by default for JavaScript, TypeScript, Vue, and Markdown. |
 
+### Ghostty Syntax
+
+Syntax highlighting for [Ghostty](https://ghostty.org) terminal configuration files. Provides a `ghostty` language with a TextMate grammar (keys, values, comments, keybind and color literals), comment toggling, and quote pairing.
+
+Files highlight automatically in three cases:
+
+- The file uses the `.ghostty` extension.
+- The file starts with a Ghostty modeline, for example `# vim: ft=ghostty`.
+- The file is `config`, or lives in a `themes` directory, inside a `ghostty` directory. Covered locations:
+  - `~/.config/ghostty/config` and `~/.config/ghostty/themes/*` (Linux, and macOS with `$XDG_CONFIG_HOME`)
+  - `~/Library/Application Support/com.mitchellh.ghostty/config` and its `themes/*` (macOS)
+
+These are recognized in the file explorer before they are opened, because the extension adds the matching globs to your user `files.associations`. This is controlled by the `vscodeTools.ghosttySyntax.autoAssociations` setting (default `true`); turning it off removes the globs the extension added and leaves any of your own untouched. The whole feature can be turned off with `vscodeTools.ghosttySyntax.enabled`.
+
+Hex colors get a swatch and the built-in color picker, including palette entries such as `palette = 0=#1d1f21`. Editing through the picker writes the color back as `#rrggbb` (or `#rrggbbaa` when it has alpha).
+
+For a config file kept somewhere else, associate it manually:
+
+```jsonc
+// settings.json
+"files.associations": {
+  "**/my-dotfiles/ghostty.conf": "ghostty"
+}
+```
+
 ## Development
 
 ```sh

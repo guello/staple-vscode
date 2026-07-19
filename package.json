@@ -25,6 +25,22 @@
     "typescript": "^5.5.0"
   },
   "contributes": {
+    "languages": [
+      {
+        "id": "ghostty",
+        "aliases": ["Ghostty Config", "ghostty"],
+        "extensions": [".ghostty"],
+        "firstLine": "^#\\s*(vim?:\\s*(set\\s+)?ft=ghostty|-\\*-\\s*(mode:\\s*)?ghostty\\s*-\\*-)",
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "ghostty",
+        "scopeName": "source.ghostty",
+        "path": "./syntaxes/ghostty.tmLanguage.json"
+      }
+    ],
     "commands": [
       {
         "command": "vscodeTools.toggleQuotes",
@@ -56,6 +72,18 @@
           "maximum": 5000,
           "scope": "resource",
           "description": "Debounce delay in milliseconds between a detected .git change and the forced refresh."
+        },
+        "vscodeTools.ghosttySyntax.enabled": {
+          "type": "boolean",
+          "default": true,
+          "scope": "application",
+          "description": "Enable Ghostty config support."
+        },
+        "vscodeTools.ghosttySyntax.autoAssociations": {
+          "type": "boolean",
+          "default": true,
+          "scope": "application",
+          "description": "Add files.associations entries so the config file and theme files inside a ghostty directory use the Ghostty language, including in the file explorer. Disabling removes the entries this extension added."
         },
         "vscodeTools.toggleQuotes.enabled": {
           "type": "boolean",
