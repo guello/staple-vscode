@@ -3,7 +3,9 @@
   "displayName": "VS Code Tools",
   "version": "0.1.0",
   "description": "Essential utilities for VS Code",
-  "categories": ["Other"],
+  "categories": [
+    "Other"
+  ],
   "license": "MIT",
   "publisher": "gabrielecanepa",
   "repository": "https://github.com/gabrielecanepa/vscode-tools",
@@ -28,8 +30,13 @@
     "languages": [
       {
         "id": "ghostty",
-        "aliases": ["Ghostty Config", "ghostty"],
-        "extensions": [".ghostty"],
+        "aliases": [
+          "Ghostty Config",
+          "ghostty"
+        ],
+        "extensions": [
+          ".ghostty"
+        ],
         "firstLine": "^#\\s*(vim?:\\s*(set\\s+)?ft=ghostty|-\\*-\\s*(mode:\\s*)?ghostty\\s*-\\*-)",
         "configuration": "./language-configuration.json"
       }
@@ -46,8 +53,49 @@
         "command": "vscodeTools.toggleQuotes",
         "title": "Toggle Quotes",
         "category": "VS Code Tools"
+      },
+      {
+        "command": "vscodeTools.optimizeImage",
+        "title": "Optimize Image",
+        "category": "VS Code Tools"
+      },
+      {
+        "command": "vscodeTools.optimizeFolderImages",
+        "title": "Optimize Images in Folder",
+        "category": "VS Code Tools"
       }
     ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "vscodeTools.optimizeImage",
+          "when": "config.vscodeTools.optimizeImages.app && !explorerResourceIsFolder && resourceExtname =~ /\\.(png|jpe?g|gif|svg|webp|avif|tiff?|bmp)$/i",
+          "group": "7_modification"
+        },
+        {
+          "command": "vscodeTools.optimizeFolderImages",
+          "when": "config.vscodeTools.optimizeImages.app && explorerResourceIsFolder",
+          "group": "7_modification"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "vscodeTools.optimizeImage",
+          "when": "config.vscodeTools.optimizeImages.app && resourceExtname =~ /\\.(png|jpe?g|gif|svg|webp|avif|tiff?|bmp)$/i",
+          "group": "7_modification"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "vscodeTools.optimizeImage",
+          "when": "config.vscodeTools.optimizeImages.app"
+        },
+        {
+          "command": "vscodeTools.optimizeFolderImages",
+          "when": "false"
+        }
+      ]
+    },
     "keybindings": [
       {
         "command": "vscodeTools.toggleQuotes",
@@ -85,6 +133,32 @@
           "scope": "application",
           "description": "Add files.associations entries so the config file and theme files inside a ghostty directory use the Ghostty language, including in the file explorer. Disabling removes the entries this extension added."
         },
+        "vscodeTools.optimizeImages.app": {
+          "type": "string",
+          "default": "",
+          "scope": "machine",
+          "description": "Name of the optimizer app to open images with, for example \"ImageOptim\". The feature stays hidden until this is set. Machine-scoped so a workspace cannot point it at an arbitrary executable."
+        },
+        "vscodeTools.optimizeImages.imageRegex": {
+          "type": "string",
+          "default": "\\.(png|jpe?g|gif|svg|webp|avif|tiff?|bmp)$",
+          "scope": "resource",
+          "description": "Case-insensitive regex matching image files found when optimizing a folder."
+        },
+        "vscodeTools.optimizeImages.searchIgnoreFolders": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [".git", ".svn", "node_modules", "bower_components"],
+          "scope": "resource",
+          "description": "Folder names skipped when searching a folder recursively."
+        },
+        "vscodeTools.optimizeImages.confirmThreshold": {
+          "type": "number",
+          "default": 50,
+          "minimum": 1,
+          "scope": "resource",
+          "description": "Ask for confirmation before optimizing a folder that contains more than this many images."
+        },
         "vscodeTools.toggleQuotes.enabled": {
           "type": "boolean",
           "default": true,
@@ -110,7 +184,10 @@
               }
             ]
           },
-          "default": ["\"", "'"],
+          "default": [
+            "\"",
+            "'"
+          ],
           "scope": "language-overridable",
           "description": "Quote characters to cycle through. Each entry is a single character or a [begin, end] pair."
         }
@@ -125,24 +202,48 @@
         ]
       },
       "[javascriptreact]": {
-        "vscodeTools.toggleQuotes.chars": ["\"", "'", "`"]
+        "vscodeTools.toggleQuotes.chars": [
+          "\"",
+          "'",
+          "`"
+        ]
       },
       "[typescript]": {
-        "vscodeTools.toggleQuotes.chars": ["\"", "'", "`"]
+        "vscodeTools.toggleQuotes.chars": [
+          "\"",
+          "'",
+          "`"
+        ]
       },
       "[typescriptreact]": {
-        "vscodeTools.toggleQuotes.chars": ["\"", "'", "`"]
+        "vscodeTools.toggleQuotes.chars": [
+          "\"",
+          "'",
+          "`"
+        ]
       },
       "[vue]": {
-        "vscodeTools.toggleQuotes.chars": ["\"", "'", "`"]
+        "vscodeTools.toggleQuotes.chars": [
+          "\"",
+          "'",
+          "`"
+        ]
       },
       "[markdown]": {
-        "vscodeTools.toggleQuotes.chars": ["\"", "'", "`"]
+        "vscodeTools.toggleQuotes.chars": [
+          "\"",
+          "'",
+          "`"
+        ]
       }
     }
   },
-  "activationEvents": ["onStartupFinished"],
-  "extensionDependencies": ["vscode.git"],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "extensionDependencies": [
+    "vscode.git"
+  ],
   "engines": {
     "vscode": "^1.90.0"
   },
