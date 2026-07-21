@@ -1,7 +1,9 @@
 {
   "comments": {
-    "lineComment": "#"
-  },  
+    "lineComment": {
+      "comment": "#"
+    }
+  },
   "brackets": [],
   "autoClosingPairs": [
     { "open": "\"", "close": "\"" },

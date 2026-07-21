@@ -1,0 +1,26 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "arrowParens": "avoid",
+  "semi": false,
+  "singleQuote": true,
+  "sortImports": {
+    "groups": [
+      ["side_effect", "side_effect_style", "style"],
+      "builtin",
+      "vscode",
+      "external",
+      ["index", "sibling", "parent"],
+      "unknown"
+    ],
+    "customGroups": [
+      {
+        "groupName": "vscode",
+        "elementNamePattern": ["vscode"]
+      }
+    ],
+    "newlinesBetween": true,
+    "sortSideEffects": false
+  },
+  "sortPackageJson": false,
+  "trailingComma": "es5"
+}

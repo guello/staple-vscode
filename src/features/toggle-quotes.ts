@@ -2,18 +2,18 @@ import * as vscode from 'vscode'
 
 const SECTION = 'vscodeTools.toggleQuotes'
 
-export interface QuotePair {
+interface QuotePair {
   begin: string
   end: string
 }
 
-export interface ToggleEdit {
+interface ToggleEdit {
   start: number
   end: number
   text: string
 }
 
-export function normalizeChars(raw: unknown): QuotePair[] {
+function normalizeChars(raw: unknown): QuotePair[] {
   if (!Array.isArray(raw)) return []
   const pairs: QuotePair[] = []
   for (const item of raw) {
@@ -77,10 +77,10 @@ function findAsymmetric(line: string, column: number, pair: QuotePair, pairIndex
 function convertBody(body: string, from: QuotePair, to: QuotePair): string {
   let result = body
   if (from.begin === from.end && from.begin.length === 1) {
-    result = result.replaceAll('\\' + from.begin, from.begin)
+    result = result.replaceAll(`\\${from.begin}`, from.begin)
   }
   if (to.begin === to.end && to.begin.length === 1) {
-    result = result.replaceAll(to.begin, '\\' + to.begin)
+    result = result.replaceAll(to.begin, `\\${to.begin}`)
   }
   return result
 }

@@ -1,5 +1,5 @@
 **
-!**/*.tmLanguage.json
+!*.tmLanguage.json
 !extension.js
 !icon.png
 !language-configuration.json

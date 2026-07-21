@@ -49,7 +49,12 @@ const parseHex = (hex: string): vscode.Color | undefined => {
     return new vscode.Color(((int >> 16) & 0xff) / 255, ((int >> 8) & 0xff) / 255, (int & 0xff) / 255, 1)
   }
   if (value.length === 8) {
-    return new vscode.Color(((int >> 24) & 0xff) / 255, ((int >> 16) & 0xff) / 255, ((int >> 8) & 0xff) / 255, (int & 0xff) / 255)
+    return new vscode.Color(
+      ((int >> 24) & 0xff) / 255,
+      ((int >> 16) & 0xff) / 255,
+      ((int >> 8) & 0xff) / 255,
+      (int & 0xff) / 255
+    )
   }
   return undefined
 }

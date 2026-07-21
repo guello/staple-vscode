@@ -2,7 +2,7 @@
   "name": "vscode-tools",
   "displayName": "VS Code Tools",
   "version": "0.1.0",
-  "description": "Essential utilities for VS Code",
+  "description": "Essential VS Code utilities packaged as a single lightweight, performant extension",
   "categories": [
     "Other"
   ],
@@ -14,7 +14,12 @@
   "packageManager": "pnpm@11.15.0",
   "scripts": {
     "build": "esbuild src/extension.ts --bundle --outfile=extension.js --external:vscode --format=cjs --platform=node --target=node20 --minify",
-    "check": "tsc --noEmit",
+    "check": "pnpm run --parallel \"/^check:/\"",
+    "check:format": "oxfmt --check",
+    "check:knip": "knip",
+    "check:lint": "oxlint",
+    "check:types": "tsc --noEmit",
+    "fix": "oxlint --fix && oxfmt",
     "deploy": "pnpm run package && code --install-extension vscode-tools-$npm_package_version.vsix",
     "package": "pnpm run check && vsce package --no-dependencies",
     "vscode:prepublish": "pnpm run build"
@@ -24,6 +29,10 @@
     "@types/vscode": "^1.90.0",
     "@vscode/vsce": "^3.0.0",
     "esbuild": "^0.25.0",
+    "knip": "^6.27.0",
+    "oxfmt": "^0.59.0",
+    "oxlint": "^1.74.0",
+    "oxlint-tsgolint": "^0.25.0",
     "typescript": "^5.5.0"
   },
   "contributes": {
@@ -147,8 +156,15 @@
         },
         "vscodeTools.optimizeImages.searchIgnoreFolders": {
           "type": "array",
-          "items": { "type": "string" },
-          "default": [".git", ".svn", "node_modules", "bower_components"],
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".git",
+            ".svn",
+            "node_modules",
+            "bower_components"
+          ],
           "scope": "resource",
           "description": "Folder names skipped when searching a folder recursively."
         },
