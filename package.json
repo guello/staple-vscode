@@ -20,6 +20,7 @@
     "check:lint": "oxlint",
     "check:types": "tsc --noEmit",
     "fix": "oxlint --fix && oxfmt",
+    "test": "esbuild src/features/sort-objects-by-key.test.ts --bundle --outfile=node_modules/.cache/vscode-tools/sort-objects-by-key.test.cjs --format=cjs --platform=node --target=node20 && node node_modules/.cache/vscode-tools/sort-objects-by-key.test.cjs",
     "deploy": "pnpm run package && code --install-extension vscode-tools-$npm_package_version.vsix",
     "package": "pnpm run check && vsce package --no-dependencies",
     "vscode:prepublish": "pnpm run build"
@@ -72,6 +73,12 @@
         "command": "vscodeTools.optimizeFolderImages",
         "title": "Optimize Images in Folder",
         "category": "VS Code Tools"
+      },
+      {
+        "command": "vscodeTools.sortObjectsByKey",
+        "title": "Sort Objects By Key",
+        "category": "VS Code Tools",
+        "enablement": "config.vscodeTools.sortObjectsByKey.enabled && !editorReadonly && (editorLangId == json || config.vscodeTools.sortObjectsByKey.allowNonJson)"
       }
     ],
     "menus": {
@@ -102,6 +109,10 @@
         {
           "command": "vscodeTools.optimizeFolderImages",
           "when": "false"
+        },
+        {
+          "command": "vscodeTools.sortObjectsByKey",
+          "when": "config.vscodeTools.sortObjectsByKey.enabled && (editorLangId == json || config.vscodeTools.sortObjectsByKey.allowNonJson)"
         }
       ]
     },
@@ -174,6 +185,18 @@
           "minimum": 1,
           "scope": "resource",
           "description": "Ask for confirmation before optimizing a folder that contains more than this many images."
+        },
+        "vscodeTools.sortObjectsByKey.enabled": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Enable the Sort Objects By Key command."
+        },
+        "vscodeTools.sortObjectsByKey.allowNonJson": {
+          "type": "boolean",
+          "default": false,
+          "scope": "resource",
+          "description": "Allow the Sort Objects By Key command outside the JSON language mode. The file contents must still be valid JSON."
         },
         "vscodeTools.toggleQuotes.enabled": {
           "type": "boolean",

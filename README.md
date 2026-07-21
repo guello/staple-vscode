@@ -20,12 +20,18 @@ Refreshes the built-in Git view (Source Control changes list) as soon as a repos
 
 ### Toggle Quotes
 
-Cycles the quotes around the cursor with `cmd+'` (`ctrl+'` on Windows and Linux), replacing the [vscode-toggle-quotes](https://marketplace.visualstudio.com/items?itemName=BriteSnow.vscode-toggle-quotes) extension. Supports multiple cursors and escapes or unescapes inner quotes when cycling.
+Cycles the quotes around the cursor with `cmd+'` (`ctrl+'` on Windows and Linux). Supports multiple cursors and escapes or unescapes inner quotes when cycling.
 
 | Setting                            | Default       | Description                                                                                                                                                            |
 | ---------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `vscodeTools.toggleQuotes.enabled` | `true`        | Enable the command.                                                                                                                                                    |
 | `vscodeTools.toggleQuotes.chars`   | `["\"", "'"]` | Characters to cycle. Entries are a character or a [begin, end] pair. Language overridable; backtick is added by default for JavaScript, TypeScript, Vue, and Markdown. |
+
+### Sort Objects By Key
+
+Run **VS Code Tools: Sort Objects By Key** from the Command Palette while editing a JSON file. The command reads the top-level array, lists every key found across its objects, and sorts the objects by the selected key in ascending order. Objects without that key stay at the end in their original order.
+
+The command is available for JSON files by default. Set `vscodeTools.sortObjectsByKey.enabled` to `false` to disable it. Set `vscodeTools.sortObjectsByKey.allowNonJson` to `true` to use it in another language mode; the file must still contain valid JSON. You can assign a shortcut to `vscodeTools.sortObjectsByKey` from the Keyboard Shortcuts editor.
 
 ### Ghostty Syntax
 
