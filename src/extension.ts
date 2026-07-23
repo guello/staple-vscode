@@ -5,13 +5,17 @@ import { activateGitInstantRefresh } from './features/git-instant-refresh'
 import { activateOptimizeImage } from './features/optimize-images'
 import { activateSortObjectsByKey } from './features/sort-objects-by-key'
 import { activateToggleQuotes } from './features/toggle-quotes'
+import { activateToml, deactivateToml } from './features/toml'
 
-export function activate(context: vscode.ExtensionContext): void {
+export const activate = (context: vscode.ExtensionContext): void => {
   void activateGitInstantRefresh(context)
   activateGhosttySyntax(context)
   activateOptimizeImage(context)
   activateSortObjectsByKey(context)
   activateToggleQuotes(context)
+  activateToml(context)
 }
 
-export function deactivate(): void {}
+export const deactivate = async (): Promise<void> => {
+  await deactivateToml()
+}

@@ -33,6 +33,35 @@ Run **VS Code Tools: Sort Objects By Key** from the Command Palette while editin
 
 The command is available for JSON files by default. Set `vscodeTools.sortObjectsByKey.enabled` to `false` to disable it. Set `vscodeTools.sortObjectsByKey.allowNonJson` to `true` to use it in another language mode; the file must still contain valid JSON. You can assign a shortcut to `vscodeTools.sortObjectsByKey` from the Keyboard Shortcuts editor.
 
+### TOML
+
+TOML files, `Cargo.lock`, and `uv.lock` get syntax highlighting, comment and bracket editing, diagnostics, formatting, schema completion and validation, hover details, folding, document symbols, links, and symbol renaming. TOML fenced code blocks and `+++` frontmatter are highlighted in Markdown. The Taplo language server starts only after a TOML document is opened and stops when no TOML documents remain open.
+
+Associate a JSON Schema by placing one of these declarations before any TOML table or value:
+
+```toml
+"$schema" = "./schema.json"
+```
+
+```toml
+#:schema ./schema.json
+```
+
+The path can be relative to the TOML file or an absolute URL. Use a `./` or `../` prefix for relative paths in a `"$schema"` value. Schema catalogs, filename associations, schema pickers, and Taplo configuration files are not used. Downloaded schemas are cached in the extension's global storage. Prefer `#:schema` when a strict schema rejects unknown properties, since `"$schema"` is part of the TOML data and may need to be declared as an allowed property in the schema.
+
+| Setting                                          | Default | Description                                              |
+| ------------------------------------------------ | ------- | -------------------------------------------------------- |
+| `vscodeTools.toml.enabled`                       | `true`  | Enable the TOML language server features.                |
+| `vscodeTools.toml.completion.maxKeys`            | `5`     | Limit dotted keys shown in completion items.             |
+| `vscodeTools.toml.schema.links`                  | `false` | Show links supplied by the active schema.                |
+| `vscodeTools.toml.schema.cache.memoryExpiration` | `60`    | Expire in-memory schema entries after this many seconds. |
+| `vscodeTools.toml.schema.cache.diskExpiration`   | `600`   | Refetch disk-cached schemas after this many seconds.     |
+| `vscodeTools.toml.formatter.*`                   | `null`  | Override individual Taplo formatter options.             |
+
+Formatter settings use the `vscodeTools.toml.formatter` prefix. Available keys are `alignEntries`, `alignComments`, `arrayTrailingComma`, `arrayAutoExpand`, `inlineTableExpand`, `arrayAutoCollapse`, `compactArrays`, `compactInlineTables`, `compactEntries`, `columnWidth`, `indentTables`, `indentEntries`, `indentString`, `trailingNewline`, `reorderKeys`, `reorderArrays`, `reorderInlineTables`, `allowedBlankLines`, and `crlf`. A `null` value keeps Taplo's default. The editor's tab size and spaces setting still controls indentation unless `indentString` is set.
+
+The TOML grammar and language server are derived from [Taplo and Even Better TOML](https://github.com/tamasfe/taplo) by Ferenc Tamás (MIT).
+
 ### Ghostty Syntax
 
 Syntax highlighting for [Ghostty](https://ghostty.org) terminal configuration files. Provides a `ghostty` language with a TextMate grammar (keys, values, comments, keybind and color literals), comment toggling, and quote pairing.
@@ -88,4 +117,4 @@ pnpm install
 pnpm run deploy
 ```
 
-`pnpm run deploy` checks the project, bundles `src/` into `extension.js` with esbuild, packages the vsix, and installs it into VS Code. Reload the VS Code window after installing. `pnpm run check` runs TypeScript, Oxlint, Oxfmt's check mode, and Knip in parallel. Use `pnpm run fix` to apply safe lint fixes and format the repository. Run `pnpm run build` or `pnpm run package` when you only need those steps.
+`pnpm run deploy` checks the project, bundles the extension and TOML language server into `dist/` with esbuild, packages the vsix, and installs it into VS Code. Reload the VS Code window after installing. `pnpm run check` runs TypeScript, Oxlint, Oxfmt's check mode, and Knip in parallel. Use `pnpm run fix` to apply safe lint fixes and format the repository. Run `pnpm run build` or `pnpm run package` when you only need those steps.

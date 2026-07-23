@@ -10,10 +10,10 @@
   "publisher": "gabrielecanepa",
   "repository": "https://github.com/gabrielecanepa/vscode-tools",
   "icon": "icon.png",
-  "main": "./extension.js",
+  "main": "./dist/extension.js",
   "packageManager": "pnpm@11.15.0",
   "scripts": {
-    "build": "esbuild src/extension.ts --bundle --outfile=extension.js --external:vscode --format=cjs --platform=node --target=node20 --minify",
+    "build": "esbuild src/extension.ts src/features/toml/client.ts src/features/toml/server.ts --bundle --outdir=dist --outbase=src --external:vscode --format=cjs --platform=node --target=node20 --minify",
     "check": "pnpm run --parallel \"/^check:/\"",
     "check:format": "oxfmt --check",
     "check:knip": "knip",
@@ -36,6 +36,16 @@
     "oxlint-tsgolint": "^0.25.0",
     "typescript": "^5.5.0"
   },
+  "dependencies": {
+    "@taplo/lsp": "^0.8.0",
+    "vscode-languageclient": "^9.0.1"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "extensionDependencies": [
+    "vscode.git"
+  ],
   "contributes": {
     "languages": [
       {
@@ -48,14 +58,50 @@
           ".ghostty"
         ],
         "firstLine": "^#\\s*(vim?:\\s*(set\\s+)?ft=ghostty|-\\*-\\s*(mode:\\s*)?ghostty\\s*-\\*-)",
-        "configuration": "./language-configuration.json"
+        "configuration": "./languages/ghostty/language-configuration.json"
+      },
+      {
+        "id": "toml",
+        "aliases": [
+          "TOML"
+        ],
+        "extensions": [
+          ".toml"
+        ],
+        "filenames": [
+          "Cargo.lock",
+          "uv.lock"
+        ],
+        "configuration": "./languages/toml/language-configuration.json"
       }
     ],
     "grammars": [
       {
         "language": "ghostty",
         "scopeName": "source.ghostty",
-        "path": "./syntaxes/ghostty.tmLanguage.json"
+        "path": "./languages/ghostty/ghostty.tmLanguage.json"
+      },
+      {
+        "language": "toml",
+        "scopeName": "source.toml",
+        "path": "./languages/toml/toml.tmLanguage.json"
+      },
+      {
+        "scopeName": "markdown.toml.frontmatter.codeblock",
+        "path": "./languages/toml/markdown-frontmatter.tmLanguage.json",
+        "injectTo": [
+          "text.html.markdown"
+        ]
+      },
+      {
+        "scopeName": "markdown.toml.codeblock",
+        "path": "./languages/toml/markdown-codeblock.tmLanguage.json",
+        "injectTo": [
+          "text.html.markdown"
+        ],
+        "embeddedLanguages": {
+          "meta.embedded.block.toml": "toml"
+        }
       }
     ],
     "commands": [
@@ -198,6 +244,212 @@
           "scope": "resource",
           "description": "Allow the Sort Objects By Key command outside the JSON language mode. The file contents must still be valid JSON."
         },
+        "vscodeTools.toml.enabled": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Enable TOML diagnostics, formatting, completion, hover, folding, outline navigation, and symbol renaming."
+        },
+        "vscodeTools.toml.completion.maxKeys": {
+          "type": "integer",
+          "default": 5,
+          "minimum": 0,
+          "scope": "resource",
+          "description": "Maximum number of dotted keys shown in a TOML completion item. Set to 0 to disable key completions."
+        },
+        "vscodeTools.toml.schema.links": {
+          "type": "boolean",
+          "default": false,
+          "scope": "resource",
+          "description": "Show schema-provided links on TOML keys."
+        },
+        "vscodeTools.toml.schema.cache.memoryExpiration": {
+          "type": "integer",
+          "default": 60,
+          "minimum": 0,
+          "scope": "resource",
+          "description": "Seconds before an in-memory TOML schema cache entry expires."
+        },
+        "vscodeTools.toml.schema.cache.diskExpiration": {
+          "type": "integer",
+          "default": 600,
+          "minimum": 0,
+          "scope": "resource",
+          "description": "Seconds before a cached TOML schema is fetched again."
+        },
+        "vscodeTools.toml.formatter.alignEntries": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Align consecutive TOML entries vertically."
+        },
+        "vscodeTools.toml.formatter.alignComments": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Align consecutive trailing comments vertically."
+        },
+        "vscodeTools.toml.formatter.arrayTrailingComma": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Add trailing commas to multiline arrays."
+        },
+        "vscodeTools.toml.formatter.arrayAutoExpand": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Expand arrays to multiple lines when needed."
+        },
+        "vscodeTools.toml.formatter.inlineTableExpand": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Expand inline table values to multiple lines."
+        },
+        "vscodeTools.toml.formatter.arrayAutoCollapse": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Collapse arrays that fit on one line."
+        },
+        "vscodeTools.toml.formatter.compactArrays": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Omit padding inside single-line arrays."
+        },
+        "vscodeTools.toml.formatter.compactInlineTables": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Omit padding inside inline tables."
+        },
+        "vscodeTools.toml.formatter.compactEntries": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Omit spaces around entry equals signs."
+        },
+        "vscodeTools.toml.formatter.columnWidth": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "default": null,
+          "minimum": 1,
+          "scope": "resource",
+          "description": "Target column width used when expanding arrays."
+        },
+        "vscodeTools.toml.formatter.indentTables": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Indent subtables when they appear in order."
+        },
+        "vscodeTools.toml.formatter.indentEntries": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Indent entries under their tables."
+        },
+        "vscodeTools.toml.formatter.indentString": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Indentation string. By default, the editor tab size and space setting are used."
+        },
+        "vscodeTools.toml.formatter.trailingNewline": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Add a trailing newline."
+        },
+        "vscodeTools.toml.formatter.reorderKeys": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Sort keys that are not separated by blank lines."
+        },
+        "vscodeTools.toml.formatter.reorderArrays": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Sort array values that are not separated by blank lines."
+        },
+        "vscodeTools.toml.formatter.reorderInlineTables": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Sort inline table entries."
+        },
+        "vscodeTools.toml.formatter.allowedBlankLines": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "default": null,
+          "minimum": 0,
+          "scope": "resource",
+          "description": "Maximum number of consecutive blank lines."
+        },
+        "vscodeTools.toml.formatter.crlf": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "scope": "resource",
+          "description": "Use CRLF line endings."
+        },
         "vscodeTools.toggleQuotes.enabled": {
           "type": "boolean",
           "default": true,
@@ -280,12 +532,6 @@
   "activationEvents": [
     "onStartupFinished"
   ],
-  "extensionDependencies": [
-    "vscode.git"
-  ],
-  "engines": {
-    "vscode": "^1.90.0"
-  },
   "capabilities": {
     "untrustedWorkspaces": {
       "supported": true

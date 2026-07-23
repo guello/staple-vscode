@@ -1,4 +1,5 @@
 {
   "$schema": "./node_modules/knip/schema.json",
+  "entry": ["src/features/toml/client.ts", "src/features/toml/server.ts"],
   "project": ["src/**/*.ts"]
 }
