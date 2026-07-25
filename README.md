@@ -1,13 +1,20 @@
 <div align="center">
-  <img src="icon.png" style="width: 5.5rem" />
+  <img src="icon.png" style="width: 80px" />
 
 # VS Code Tools
 
 </div>
 
-Essential Visual Studio Code utilities packaged as a single lightweight and performant extension.
+Essential Visual Studio Code utilities packaged as a single lightweight, performant extension.
 
 ## Features
+
+- [Git Instant Refresh](#git-instant-refresh)
+- [Toggle Quotes](#toggle-quotes)
+- [Sort Objects By Key](#sort-objects-by-key)
+- [TOML](#toml)
+- [Ghostty Syntax](#ghostty-syntax)
+- [Optimize Images](#optimize-images)
 
 ### Git Instant Refresh
 
@@ -102,7 +109,7 @@ The feature stays hidden until you set `vscodeTools.optimizeImages.app`. With no
 | `vscodeTools.optimizeImages.searchIgnoreFolders` | `[".git", ".svn", "node_modules", "bower_components"]` | Folder names skipped during the recursive search.                                                                                                                                                                                   |
 | `vscodeTools.optimizeImages.confirmThreshold`    | `50`                                                   | Confirm before optimizing a folder with more than this many images.                                                                                                                                                                 |
 
-#### Suggested apps
+**Suggested apps**
 
 Pick an app that optimizes files in place and takes file paths passed to it, then set its name as `vscodeTools.optimizeImages.app`.
 

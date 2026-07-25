@@ -8,7 +8,10 @@
   ],
   "license": "MIT",
   "publisher": "gabrielecanepa",
-  "repository": "https://github.com/gabrielecanepa/vscode-tools",
+  "repository": {
+    "type": "https",
+    "url": "https://github.com/gabrielecanepa/vscode-tools"
+  },
   "icon": "icon.png",
   "main": "./dist/extension.js",
   "packageManager": "pnpm@11.17.0",
