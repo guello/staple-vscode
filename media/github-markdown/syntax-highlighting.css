@@ -1,0 +1,77 @@
+.github-markdown pre {
+  & .hljs-function,
+  & .hljs-params {
+    color: var(--fgColor-default);
+  }
+  & .hljs-doctag,
+  & .hljs-keyword,
+  & .hljs-meta .hljs-keyword,
+  & .hljs-template-tag,
+  & .hljs-template-variable,
+  & .hljs-type,
+  & .hljs-variable.language_ {
+    color: var(--color-prettylights-syntax-keyword);
+  }
+  & .hljs-title,
+  & .hljs-title.class_,
+  & .hljs-title.class_.inherited__,
+  & .hljs-title.function_ {
+    color: var(--color-prettylights-syntax-entity);
+  }
+  & .hljs-attr,
+  & .hljs-attribute,
+  & .hljs-literal,
+  & .hljs-meta,
+  & .hljs-number,
+  & .hljs-operator,
+  & .hljs-selector-attr,
+  & .hljs-selector-class,
+  & .hljs-selector-id,
+  & .hljs-subst,
+  & .hljs-variable {
+    color: var(--color-prettylights-syntax-constant);
+  }
+  & .hljs-meta .hljs-string,
+  & .hljs-regexp,
+  & .hljs-string {
+    color: var(--color-prettylights-syntax-string);
+  }
+  & .hljs-built_in,
+  & .hljs-symbol {
+    color: var(--color-prettylights-syntax-variable);
+  }
+  & .hljs-code,
+  & .hljs-comment,
+  & .hljs-formula {
+    color: var(--color-prettylights-syntax-comment);
+  }
+  & .hljs-name,
+  & .hljs-quote,
+  & .hljs-selector-pseudo,
+  & .hljs-selector-tag {
+    color: var(--color-prettylights-syntax-entity-tag);
+  }
+  & .hljs-section {
+    color: var(--color-prettylights-syntax-markup-heading);
+    font-weight: bold;
+  }
+  & .hljs-bullet {
+    color: var(--color-prettylights-syntax-markup-list);
+  }
+  & .hljs-emphasis {
+    color: var(--color-prettylights-syntax-constant);
+    font-style: italic;
+  }
+  & .hljs-strong {
+    color: var(--color-prettylights-syntax-constant);
+    font-weight: bold;
+  }
+  & .hljs-addition {
+    color: var(--color-prettylights-syntax-markup-inserted-text);
+    background-color: var(--color-prettylights-syntax-markup-inserted-bg);
+  }
+  & .hljs-deletion {
+    color: var(--color-prettylights-syntax-markup-deleted-text);
+    background-color: var(--color-prettylights-syntax-markup-deleted-bg);
+  }
+}

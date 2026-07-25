@@ -1,0 +1,56 @@
+html:has(.github-markdown) {
+  padding: 0;
+  font-size: 16px;
+}
+
+body:has(.github-markdown) {
+  padding: 0;
+
+  &.scrollBeyondLastLine {
+    margin-bottom: 0;
+  }
+}
+
+.github-markdown:not(.github-markdown *) {
+  box-sizing: border-box;
+  min-height: 100vh;
+
+  body.scrollBeyondLastLine & {
+    padding-bottom: calc(100vh + 10px);
+  }
+}
+
+.github-markdown__content {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px;
+
+  @media (max-width: 767px) {
+    padding: 16px;
+  }
+}
+
+.github-markdown {
+  & blockquote {
+    background-color: transparent;
+    border-radius: 0;
+  }
+  & code {
+    color: inherit;
+  }
+  & pre {
+    border: 0;
+  }
+}
+
+body.showEditorSelection .github-markdown {
+  & .code-active-line::before {
+    border-left: 3px solid var(--borderColor-default);
+  }
+  & .code-line:hover::before {
+    border-left: 3px solid var(--fgColor-muted);
+  }
+  & .code-line .code-line:hover::before {
+    border-left: none;
+  }
+}

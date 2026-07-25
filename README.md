@@ -10,6 +10,7 @@ Essential Visual Studio Code utilities packaged as a single lightweight, perform
 ## Features
 
 - [Git Instant Refresh](#git-instant-refresh)
+- [GitHub Markdown Preview](#github-markdown-preview)
 - [Toggle Quotes](#toggle-quotes)
 - [Sort Objects By Key](#sort-objects-by-key)
 - [TOML](#toml)
@@ -24,6 +25,21 @@ Refreshes the built-in Git view (Source Control changes list) as soon as a repos
 | --------------------------------------- | ------- | -------------------------------------------- |
 | `vscodeTools.gitInstantRefresh.enabled` | `true`  | Enable the feature.                          |
 | `vscodeTools.gitInstantRefresh.delay`   | `200`   | Debounce in milliseconds before the refresh. |
+
+### GitHub Markdown Preview
+
+Renders the built-in Markdown preview with GitHub's stylesheet. Nine GitHub themes ship with it: light and dark, their high contrast, Protanopia and Deuteranopia, and Tritanopia variants, plus dark dimmed. By default the preview follows your editor theme, and it resolves correctly under both high contrast themes.
+
+Only the preview styling is replaced. GitHub features that change the rendered HTML, such as `:emoji:` shortcodes and `- [ ]` task lists, still need their own extensions.
+
+| Setting                                 | Default | Description                                                                           |
+| --------------------------------------- | ------- | ------------------------------------------------------------------------------------- |
+| `vscodeTools.githubMarkdown.enabled`    | `true`  | Style the Markdown preview. Turning it off restores the built-in look.                |
+| `vscodeTools.githubMarkdown.colorTheme` | `auto`  | `auto` follows the editor theme, `system` follows the OS, `light` and `dark` pin one. |
+| `vscodeTools.githubMarkdown.lightTheme` | `light` | GitHub theme used whenever the preview resolves to light.                             |
+| `vscodeTools.githubMarkdown.darkTheme`  | `dark`  | GitHub theme used whenever the preview resolves to dark.                              |
+
+Both theme settings accept `light`, `light_high_contrast`, `light_colorblind`, `light_tritanopia`, `dark`, `dark_high_contrast`, `dark_colorblind`, `dark_tritanopia`, and `dark_dimmed`.
 
 ### Toggle Quotes
 
@@ -124,4 +140,8 @@ pnpm install
 pnpm run deploy
 ```
 
-`pnpm run deploy` checks the project, bundles the extension and TOML language server into `dist/` with esbuild, packages the vsix, and installs it into VS Code. Reload the VS Code window after installing. `pnpm run check` runs TypeScript, Oxlint, Oxfmt's check mode, and Knip in parallel. Use `pnpm run fix` to apply safe lint fixes and format the repository. Run `pnpm run build` or `pnpm run package` when you only need those steps.
+`pnpm run deploy` checks the project, bundles the extension into `dist/`, packages the vsix, and installs it into VS Code. Reload the VS Code window after installing. `pnpm run check` runs TypeScript, Oxlint, Oxfmt's check mode, and Knip in parallel. Use `pnpm run fix` to apply safe lint fixes and format the repository. Run `pnpm run build` or `pnpm run package` when you only need those steps.
+
+Every long-running command lives in `scripts/` and runs through Node's TypeScript support, so `package.json` only holds the entry points. `scripts/build.mts` bundles the extension with esbuild and, in parallel, writes `dist/features/github-markdown/markdown.css` and `themes.css` by pulling the current GitHub stylesheets with [generate-github-markdown-css](https://github.com/sindresorhus/generate-github-markdown-css). That second step needs network access on a cold cache, since the package scrapes github.com and calls the public Markdown API; results are cached under `node_modules/.cache` for a day. The hand-written preview stylesheets live in `media/github-markdown/`.
+
+`pnpm test` bundles every `src/**/*.test.ts` with esbuild and runs each bundle on Node's test runner. The bundle replaces the `vscode` module with an empty stub so feature modules that import it can still be unit tested.
