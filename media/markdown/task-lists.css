@@ -1,0 +1,86 @@
+.markdown__content {
+  --task-list-checkboxSize: 0.9375em;
+  --task-list-mutedColor: var(--fgColor-muted, var(--vscode-descriptionForeground));
+  --task-list-bgColor: var(--bgColor-muted, var(--vscode-checkbox-background, transparent));
+  --task-list-borderColor: color-mix(in srgb, var(--task-list-mutedColor) 75%, var(--task-list-bgColor));
+  --task-list-accentColor: var(--borderColor-accent-emphasis, #4477f2);
+  --task-list-accentFgColor: #fff;
+  --task-list-cancelledColor: color-mix(in srgb, var(--task-list-mutedColor) 20%, var(--task-list-bgColor));
+  --task-list-cancelledFgColor: color-mix(in srgb, var(--task-list-mutedColor) 6%, var(--task-list-bgColor));
+
+  & .task-list-item-label {
+    display: inline;
+  }
+
+  & .task-list-item[data-task-state='cancelled'] > .task-list-item-label,
+  & .task-list-item[data-task-state='cancelled'] > p > .task-list-item-label {
+    color: var(--task-list-mutedColor);
+    text-decoration-line: underline;
+    text-decoration-skip-ink: none;
+    text-underline-offset: -0.37em;
+  }
+
+  & .task-list-item-checkbox {
+    box-sizing: border-box;
+    display: inline-grid;
+    place-content: center;
+    width: var(--task-list-checkboxSize);
+    height: var(--task-list-checkboxSize);
+    font-size: inherit;
+    appearance: none;
+    background-color: var(--task-list-bgColor);
+    border: 1px solid var(--task-list-borderColor);
+    border-radius: calc(var(--task-list-checkboxSize) * 3 / 16);
+  }
+
+  & .task-list-item-checkbox:is(:checked, [data-task-state='indeterminate']) {
+    background-color: var(--task-list-accentColor);
+    border-color: var(--task-list-accentColor);
+  }
+
+  & .task-list-item-checkbox[data-task-state='cancelled'] {
+    background-color: var(--task-list-cancelledColor);
+    border-color: var(--task-list-cancelledColor);
+  }
+
+  & .task-list-item-checkbox:is(:checked, [data-task-state='indeterminate'], [data-task-state='cancelled'])::before {
+    content: '';
+    width: var(--task-list-checkboxSize);
+    height: var(--task-list-checkboxSize);
+    background-color: var(--task-list-accentFgColor);
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: 75%;
+  }
+
+  & .task-list-item-checkbox:checked::before {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='9' fill='none' viewBox='0 0 12 9'%3E%3Cpath fill='black' fill-rule='evenodd' d='M11.78.22a.75.75 0 0 1 0 1.061L4.52 8.541a.75.75 0 0 1-1.062 0L.202 5.285a.75.75 0 0 1 1.061-1.061l2.725 2.723L10.718.22a.75.75 0 0 1 1.062 0' clip-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  & .task-list-item-checkbox[data-task-state='indeterminate']::before {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='2' fill='none' viewBox='0 0 16 2'%3E%3Cpath fill='black' fill-rule='evenodd' d='M0 1a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1' clip-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  & .task-list-item-checkbox[data-task-state='cancelled']::before {
+    background-color: var(--task-list-cancelledFgColor);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='9' fill='none' viewBox='0 0 12 9'%3E%3Cpath stroke='black' stroke-width='1.5' stroke-linecap='round' d='m2.25.75 7.5 7.5m0-7.5-7.5 7.5'/%3E%3C/svg%3E");
+  }
+}
+
+@container style(--markdown-theme: default) {
+  .markdown__content {
+    --task-list-mutedColor: var(--vscode-descriptionForeground);
+    --task-list-bgColor: var(--vscode-checkbox-background, transparent);
+    --task-list-borderColor: var(--vscode-checkbox-border, currentColor);
+    --task-list-accentColor: #4477f2;
+
+    & .task-list-item {
+      list-style-type: none;
+    }
+
+    & .task-list-item-checkbox {
+      margin: 0 0.2em 0.25em -1.4em;
+      vertical-align: middle;
+    }
+  }
+}

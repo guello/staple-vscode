@@ -2,7 +2,7 @@ import type * as vscode from 'vscode'
 
 import { activateGhosttySyntax } from './features/ghostty-syntax'
 import { activateGitInstantRefresh } from './features/git-instant-refresh'
-import { type MarkdownPreviewApi, activateGithubMarkdown } from './features/github-markdown'
+import { type MarkdownPreviewApi, activateMarkdown } from './features/markdown'
 import { activateOptimizeImage } from './features/optimize-images'
 import { activateSortObjectsByKey } from './features/sort-objects-by-key'
 import { activateToggleQuotes } from './features/toggle-quotes'
@@ -15,7 +15,7 @@ export const activate = (context: vscode.ExtensionContext): MarkdownPreviewApi =
   activateSortObjectsByKey(context)
   activateToggleQuotes(context)
   activateToml(context)
-  return activateGithubMarkdown(context)
+  return activateMarkdown(context)
 }
 
 export const deactivate = async (): Promise<void> => {

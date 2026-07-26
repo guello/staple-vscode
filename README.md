@@ -10,7 +10,7 @@ Essential Visual Studio Code utilities packaged as a single lightweight, perform
 ## Features
 
 - [Git Instant Refresh](#git-instant-refresh)
-- [GitHub Markdown Preview](#github-markdown-preview)
+- [Markdown Preview](#markdown-preview)
 - [Toggle Quotes](#toggle-quotes)
 - [Sort Objects By Key](#sort-objects-by-key)
 - [TOML](#toml)
@@ -26,20 +26,39 @@ Refreshes the built-in Git view (Source Control changes list) as soon as a repos
 | `vscodeTools.gitInstantRefresh.enabled` | `true`  | Enable the feature.                          |
 | `vscodeTools.gitInstantRefresh.delay`   | `200`   | Debounce in milliseconds before the refresh. |
 
-### GitHub Markdown Preview
+### Markdown Preview
 
-Renders the built-in Markdown preview with GitHub's stylesheet. Nine GitHub themes ship with it: light and dark, their high contrast, Protanopia and Deuteranopia, and Tritanopia variants, plus dark dimmed. By default the preview follows your editor theme, and it resolves correctly under both high contrast themes.
+Restyles the built-in Markdown preview and adds task lists. Nine GitHub themes ship with it: light and dark, their high contrast, Protanopia and Deuteranopia, and Tritanopia variants, plus dark dimmed. By default the preview follows your editor theme, and it resolves correctly under both high contrast themes.
 
-Only the preview styling is replaced. GitHub features that change the rendered HTML, such as `:emoji:` shortcodes and `- [ ]` task lists, still need their own extensions.
+| Setting                           | Default        | Description                                                                           |
+| --------------------------------- | -------------- | ------------------------------------------------------------------------------------- |
+| `vscodeTools.markdown.enabled`    | `true`         | Enable every preview feature below. Turning it off restores the built-in preview.     |
+| `vscodeTools.markdown.mode`       | `auto`         | `auto` follows the editor theme, `system` follows the OS, `light` and `dark` pin one. |
+| `vscodeTools.markdown.lightTheme` | `github-light` | Theme used whenever the preview resolves to light.                                    |
+| `vscodeTools.markdown.darkTheme`  | `github-dark`  | Theme used whenever the preview resolves to dark.                                     |
+| `vscodeTools.markdown.taskLists`  | `true`         | Render `- [ ]` and `- [x]` list items as checkboxes.                                  |
+| `vscodeTools.markdown.checkboxes` | see below      | Maps the character between the brackets to the checkbox drawn for it.                 |
 
-| Setting                                 | Default | Description                                                                           |
-| --------------------------------------- | ------- | ------------------------------------------------------------------------------------- |
-| `vscodeTools.githubMarkdown.enabled`    | `true`  | Style the Markdown preview. Turning it off restores the built-in look.                |
-| `vscodeTools.githubMarkdown.colorTheme` | `auto`  | `auto` follows the editor theme, `system` follows the OS, `light` and `dark` pin one. |
-| `vscodeTools.githubMarkdown.lightTheme` | `light` | GitHub theme used whenever the preview resolves to light.                             |
-| `vscodeTools.githubMarkdown.darkTheme`  | `dark`  | GitHub theme used whenever the preview resolves to dark.                              |
+Both theme settings accept `default`, `github-light`, `github-light-high-contrast`, `github-light-colorblind`, `github-light-tritanopia`, `github-dark`, `github-dark-high-contrast`, `github-dark-colorblind`, `github-dark-tritanopia`, and `github-dark-dimmed`. Picking `default` leaves that mode with VS Code's own preview styling, so you can style only light or only dark.
 
-Both theme settings accept `light`, `light_high_contrast`, `light_colorblind`, `light_tritanopia`, `dark`, `dark_high_contrast`, `dark_colorblind`, `dark_tritanopia`, and `dark_dimmed`.
+Task lists work with every theme, `default` included, and render as disabled checkboxes with the same markup GitHub emits. The box copies GitHub's own: a rounded square just under the size of the surrounding text, a 1px border, and GitHub's check mark, with the dash and cross drawn at the same stroke weight, so size, spacing and color stay identical across states instead of varying with the browser's native control. Under a GitHub theme every color comes from that theme's tokens; under `default` the filled states use a blue that holds up on light and dark editors.
+
+`vscodeTools.markdown.checkboxes` decides which character between the brackets produces which box. Four states exist: `unchecked` is an empty box, `checked` is a filled box with a check mark, `indeterminate` is a filled box with a dash, and `cancelled` is a muted box with a cross whose label is struck through and muted. These are the defaults:
+
+```jsonc
+"vscodeTools.markdown.checkboxes": {
+  " ": "unchecked",
+  "x": "checked",
+  "X": "checked",
+  "-": "indeterminate",
+  "/": "indeterminate",
+  "~": "cancelled"
+}
+```
+
+Your entries merge with those defaults rather than replacing them, so `{ "?": "indeterminate" }` adds a character and `{ "/": null }` drops one. Only `[ ]` and `[x]` are GitHub Flavored Markdown; every other character renders as literal text on github.com, and no convention agrees on the rest. Org mode has used `[-]` for a partly checked parent since long before any of this, while the Obsidian Tasks plugin reads `[-]` as cancelled and `[/]` as in progress. The defaults follow Org mode and accept `[/]` as well. To match GitHub exactly, unset everything else: `{ "-": null, "/": null, "~": null }`.
+
+Only the preview is affected. Other GitHub features that change the rendered HTML, such as `:emoji:` shortcodes, still need their own extensions. Another installed extension that renders task lists, such as Markdown All in One, parses `[ ]` and `[x]` first and its markup wins; the checkbox styling still applies to it, so both agree visually.
 
 ### Toggle Quotes
 
@@ -142,7 +161,9 @@ pnpm run deploy
 
 `pnpm run deploy` checks the project, bundles the extension into `dist/`, packages the vsix, and installs it into VS Code. Reload the VS Code window after installing. `pnpm run check` runs TypeScript, Oxlint, Oxfmt's check mode, and Knip in parallel. Use `pnpm run fix` to apply safe lint fixes and format the repository. Run `pnpm run build` or `pnpm run package` when you only need those steps.
 
-Every long-running command lives in `scripts/` and runs through Node's TypeScript support, so `package.json` only holds the entry points. `scripts/build.mts` bundles the extension with esbuild and, in parallel, writes `dist/features/github-markdown/markdown.css` and `themes.css` by pulling the current GitHub stylesheets with [generate-github-markdown-css](https://github.com/sindresorhus/generate-github-markdown-css). That second step needs network access on a cold cache, since the package scrapes github.com and calls the public Markdown API; results are cached under `node_modules/.cache` for a day. The hand-written preview stylesheets live in `media/github-markdown/`.
+Every long-running command lives in `scripts/` and runs through Node's TypeScript support, so `package.json` only holds the entry points. `scripts/build.mts` bundles the extension with esbuild and, in parallel, writes `dist/features/markdown/markdown.css` and `themes.css` by pulling the current GitHub stylesheets with [generate-github-markdown-css](https://github.com/sindresorhus/generate-github-markdown-css). That second step needs network access on a cold cache, since the package scrapes github.com and calls the public Markdown API; results are cached under `node_modules/.cache` for a day. The hand-written preview stylesheets live in `media/markdown/`.
+
+The generated GitHub styles are wrapped in `@container style(--markdown-theme: github)`, and `themes.css` sets that property on the preview wrapper only when the theme resolving for the current color mode is a GitHub one. That is what lets a `default` theme fall back to VS Code's own preview without shipping a second copy of the stylesheet, and it is why light and dark are resolved in CSS rather than in the extension: inside a webview `prefers-color-scheme` follows the operating system, not the editor theme, so `system` mode cannot be resolved from the extension host. Generation also rewrites `rem` to `px`, since `rem` would otherwise resolve against VS Code's 14px root instead of GitHub's 16px.
 
 `@taplo/lsp` inlines its 26 MB WebAssembly module as a base64 string, which esbuild would otherwise carry into the bundle. `scripts/build.mts` decodes that string at build time, writes it to `dist/features/toml/taplo.wasm`, and rewrites the loader to read the file from disk, so `server.js` stays around 18 KB instead of 34 MB. The plugin fails the build if the blob is missing or does not start with the wasm magic bytes, which is the signal that a `@taplo/lsp` upgrade changed its bundle layout.
 

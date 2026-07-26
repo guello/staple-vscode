@@ -1,0 +1,67 @@
+html:has(.markdown),
+body:has(.markdown) {
+  padding: 0;
+}
+
+body.scrollBeyondLastLine:has(.markdown) {
+  margin-bottom: 0;
+}
+
+.markdown {
+  box-sizing: border-box;
+  min-height: 100vh;
+  background-color: var(--bgColor-default, transparent);
+}
+
+.markdown__content {
+  padding: 1em 26px 0;
+
+  & :is(del, s) {
+    text-decoration-line: underline;
+    text-decoration-skip-ink: none;
+    text-underline-offset: -0.37em;
+  }
+}
+
+body.scrollBeyondLastLine .markdown__content {
+  padding-bottom: calc(100vh - 22px);
+}
+
+@container style(--markdown-theme: github) {
+  .markdown__content {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 32px;
+
+    @media (max-width: 767px) {
+      padding: 16px;
+    }
+
+    & blockquote {
+      background-color: transparent;
+      border-radius: 0;
+    }
+    & code {
+      color: inherit;
+    }
+    & pre {
+      border: 0;
+    }
+  }
+
+  body.scrollBeyondLastLine .markdown__content {
+    padding-bottom: calc(100vh + 10px);
+  }
+
+  body.showEditorSelection .markdown__content {
+    & .code-active-line::before {
+      border-left: 3px solid var(--borderColor-default);
+    }
+    & .code-line:hover::before {
+      border-left: 3px solid var(--fgColor-muted);
+    }
+    & .code-line .code-line:hover::before {
+      border-left: none;
+    }
+  }
+}

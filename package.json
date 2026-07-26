@@ -111,10 +111,11 @@
     ],
     "markdown.markdownItPlugins": true,
     "markdown.previewStyles": [
-      "./dist/features/github-markdown/themes.css",
-      "./dist/features/github-markdown/markdown.css",
-      "./media/github-markdown/syntax-highlighting.css",
-      "./media/github-markdown/preview.css"
+      "./dist/features/markdown/markdown.css",
+      "./dist/features/markdown/themes.css",
+      "./media/markdown/preview.css",
+      "./media/markdown/syntax-highlighting.css",
+      "./media/markdown/task-lists.css"
     ],
     "commands": [
       {
@@ -210,92 +211,6 @@
           "default": true,
           "scope": "application",
           "description": "Add files.associations entries so the config file and theme files inside a ghostty directory use the Ghostty language, including in the file explorer. Disabling removes the entries this extension added."
-        },
-        "vscodeTools.githubMarkdown.enabled": {
-          "type": "boolean",
-          "default": true,
-          "scope": "window",
-          "description": "Style the built-in Markdown preview like a rendered file on GitHub."
-        },
-        "vscodeTools.githubMarkdown.colorTheme": {
-          "type": "string",
-          "enum": [
-            "auto",
-            "system",
-            "light",
-            "dark"
-          ],
-          "enumItemLabels": [
-            "Auto (match editor)",
-            "System",
-            "Single theme: Light",
-            "Single theme: Dark"
-          ],
-          "enumDescriptions": [
-            "Follow the active VS Code color theme.",
-            "Follow the operating system color scheme.",
-            "Always use the configured light theme.",
-            "Always use the configured dark theme."
-          ],
-          "default": "auto",
-          "scope": "window",
-          "description": "How the Markdown preview picks between the light and dark GitHub theme."
-        },
-        "vscodeTools.githubMarkdown.lightTheme": {
-          "type": "string",
-          "enum": [
-            "light",
-            "light_high_contrast",
-            "light_colorblind",
-            "light_tritanopia",
-            "dark",
-            "dark_high_contrast",
-            "dark_colorblind",
-            "dark_tritanopia",
-            "dark_dimmed"
-          ],
-          "enumItemLabels": [
-            "Light",
-            "Light high contrast",
-            "Light Protanopia and Deuteranopia",
-            "Light Tritanopia",
-            "Dark",
-            "Dark high contrast",
-            "Dark Protanopia and Deuteranopia",
-            "Dark Tritanopia",
-            "Dark dimmed"
-          ],
-          "default": "light",
-          "scope": "window",
-          "markdownDescription": "GitHub theme used in light mode. Ignored when `#vscodeTools.githubMarkdown.colorTheme#` is `Single theme: Dark`."
-        },
-        "vscodeTools.githubMarkdown.darkTheme": {
-          "type": "string",
-          "enum": [
-            "light",
-            "light_high_contrast",
-            "light_colorblind",
-            "light_tritanopia",
-            "dark",
-            "dark_high_contrast",
-            "dark_colorblind",
-            "dark_tritanopia",
-            "dark_dimmed"
-          ],
-          "enumItemLabels": [
-            "Light",
-            "Light high contrast",
-            "Light Protanopia and Deuteranopia",
-            "Light Tritanopia",
-            "Dark",
-            "Dark high contrast",
-            "Dark Protanopia and Deuteranopia",
-            "Dark Tritanopia",
-            "Dark dimmed"
-          ],
-          "default": "dark",
-          "scope": "window",
-          "markdownDescription": "GitHub theme used in dark mode. Ignored when `#vscodeTools.githubMarkdown.colorTheme#` is `Single theme: Light`."
         },
         "vscodeTools.optimizeImages.app": {
           "type": "string",
@@ -547,6 +462,164 @@
           "default": null,
           "scope": "resource",
           "description": "Use CRLF line endings."
+        },
+        "vscodeTools.markdown.enabled": {
+          "type": "boolean",
+          "default": true,
+          "scope": "window",
+          "description": "Enable the Markdown preview features. Turning it off restores the built-in preview."
+        },
+        "vscodeTools.markdown.mode": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "system",
+            "light",
+            "dark"
+          ],
+          "enumItemLabels": [
+            "Auto (match editor)",
+            "System",
+            "Single theme: Light",
+            "Single theme: Dark"
+          ],
+          "enumDescriptions": [
+            "Follow the active VS Code color theme.",
+            "Follow the operating system color scheme.",
+            "Always use the configured light theme.",
+            "Always use the configured dark theme."
+          ],
+          "default": "auto",
+          "scope": "window",
+          "description": "How the Markdown preview picks between the light and dark theme."
+        },
+        "vscodeTools.markdown.lightTheme": {
+          "type": "string",
+          "enum": [
+            "default",
+            "github-light",
+            "github-light-high-contrast",
+            "github-light-colorblind",
+            "github-light-tritanopia",
+            "github-dark",
+            "github-dark-high-contrast",
+            "github-dark-colorblind",
+            "github-dark-tritanopia",
+            "github-dark-dimmed"
+          ],
+          "enumItemLabels": [
+            "Default (VS Code)",
+            "GitHub Light",
+            "GitHub Light high contrast",
+            "GitHub Light Protanopia and Deuteranopia",
+            "GitHub Light Tritanopia",
+            "GitHub Dark",
+            "GitHub Dark high contrast",
+            "GitHub Dark Protanopia and Deuteranopia",
+            "GitHub Dark Tritanopia",
+            "GitHub Dark dimmed"
+          ],
+          "enumDescriptions": [
+            "Leave the preview with the built-in VS Code styling.",
+            "Style the preview with the GitHub Light theme.",
+            "Style the preview with the GitHub Light high contrast theme.",
+            "Style the preview with the GitHub Light Protanopia and Deuteranopia theme.",
+            "Style the preview with the GitHub Light Tritanopia theme.",
+            "Style the preview with the GitHub Dark theme.",
+            "Style the preview with the GitHub Dark high contrast theme.",
+            "Style the preview with the GitHub Dark Protanopia and Deuteranopia theme.",
+            "Style the preview with the GitHub Dark Tritanopia theme.",
+            "Style the preview with the GitHub Dark dimmed theme."
+          ],
+          "default": "github-light",
+          "scope": "window",
+          "markdownDescription": "Theme used whenever the preview resolves to light. Ignored when `#vscodeTools.markdown.mode#` is `Single theme: Dark`."
+        },
+        "vscodeTools.markdown.darkTheme": {
+          "type": "string",
+          "enum": [
+            "default",
+            "github-light",
+            "github-light-high-contrast",
+            "github-light-colorblind",
+            "github-light-tritanopia",
+            "github-dark",
+            "github-dark-high-contrast",
+            "github-dark-colorblind",
+            "github-dark-tritanopia",
+            "github-dark-dimmed"
+          ],
+          "enumItemLabels": [
+            "Default (VS Code)",
+            "GitHub Light",
+            "GitHub Light high contrast",
+            "GitHub Light Protanopia and Deuteranopia",
+            "GitHub Light Tritanopia",
+            "GitHub Dark",
+            "GitHub Dark high contrast",
+            "GitHub Dark Protanopia and Deuteranopia",
+            "GitHub Dark Tritanopia",
+            "GitHub Dark dimmed"
+          ],
+          "enumDescriptions": [
+            "Leave the preview with the built-in VS Code styling.",
+            "Style the preview with the GitHub Light theme.",
+            "Style the preview with the GitHub Light high contrast theme.",
+            "Style the preview with the GitHub Light Protanopia and Deuteranopia theme.",
+            "Style the preview with the GitHub Light Tritanopia theme.",
+            "Style the preview with the GitHub Dark theme.",
+            "Style the preview with the GitHub Dark high contrast theme.",
+            "Style the preview with the GitHub Dark Protanopia and Deuteranopia theme.",
+            "Style the preview with the GitHub Dark Tritanopia theme.",
+            "Style the preview with the GitHub Dark dimmed theme."
+          ],
+          "default": "github-dark",
+          "scope": "window",
+          "markdownDescription": "Theme used whenever the preview resolves to dark. Ignored when `#vscodeTools.markdown.mode#` is `Single theme: Light`."
+        },
+        "vscodeTools.markdown.taskLists": {
+          "type": "boolean",
+          "default": true,
+          "scope": "window",
+          "markdownDescription": "Render `- [ ]` and `- [x]` list items as checkboxes. Works with every theme."
+        },
+        "vscodeTools.markdown.checkboxes": {
+          "type": "object",
+          "default": {
+            " ": "unchecked",
+            "x": "checked",
+            "X": "checked",
+            "-": "indeterminate",
+            "/": "indeterminate",
+            "~": "cancelled"
+          },
+          "propertyNames": {
+            "minLength": 1,
+            "maxLength": 1,
+            "description": "The single character written between the brackets."
+          },
+          "additionalProperties": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "unchecked",
+              "checked",
+              "indeterminate",
+              "cancelled",
+              null
+            ],
+            "enumDescriptions": [
+              "An empty box.",
+              "A filled box with a check mark.",
+              "A filled box with a dash, for partly done work.",
+              "A slashed box with the label struck through.",
+              "Stop recognizing this character."
+            ]
+          },
+          "scope": "window",
+          "markdownDescription": "Maps the character between the brackets of a task list item to the checkbox drawn for it. Your entries merge with the defaults, so `{ \"?\": \"indeterminate\" }` adds a character and `{ \"/\": null }` drops one. Only `[ ]` and `[x]` are GitHub Flavored Markdown; a file using any other character renders as literal text on github.com. Requires `#vscodeTools.markdown.taskLists#`."
         },
         "vscodeTools.toggleQuotes.enabled": {
           "type": "boolean",
