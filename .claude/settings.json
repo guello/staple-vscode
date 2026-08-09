@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm build)",
+      "Bash(pnpm check)",
+      "Bash(pnpm check:*)",
+      "Bash(pnpm check-commit)",
+      "Bash(pnpm fix)",
+      "Bash(pnpm install)",
+      "Bash(pnpm package)",
+      "Bash(pnpm test)",
+      "Bash(pnpm run build)",
+      "Bash(pnpm run check)",
+      "Bash(pnpm run check:*)",
+      "Bash(pnpm run check-commit)",
+      "Bash(pnpm run ci)",
+      "Bash(pnpm run fix)",
+      "Bash(pnpm run package)",
+      "Bash(pnpm run test)"
+    ]
+  }
+}
