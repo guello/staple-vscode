@@ -1,6 +1,6 @@
 # Third-party notices
 
-VS Code Tools includes software from the projects listed below. Each component remains subject to its license.
+Staple for VS Code includes software from the projects listed below. Each component remains subject to its license.
 
 ## vscode-ghostty-config-syntax
 

@@ -9,7 +9,7 @@ interface TomlClientModule {
   createTomlClient(context: vscode.ExtensionContext): Promise<TomlLanguageClient>
 }
 
-const SECTION = 'vscodeTools.toml'
+const SECTION = 'staple.toml'
 const LANGUAGE_ID = 'toml'
 
 let stopToml: (() => Promise<void>) | undefined
@@ -68,7 +68,7 @@ export const activateToml = (context: vscode.ExtensionContext): void => {
         await nextClient.start()
       } catch (error: unknown) {
         client = undefined
-        void vscode.window.showErrorMessage(`VS Code Tools could not start TOML support: ${errorMessage(error)}`)
+        void vscode.window.showErrorMessage(`Staple could not start TOML support: ${errorMessage(error)}`)
       }
     }
 

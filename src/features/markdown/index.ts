@@ -7,7 +7,7 @@ export interface MarkdownPreviewApi {
   extendMarkdownIt(md: MarkdownIt): MarkdownIt
 }
 
-const SECTION = 'vscodeTools.markdown'
+const SECTION = 'staple.markdown'
 const REFRESH_COMMAND = 'markdown.preview.refresh'
 
 const THEME_MODES = ['auto', 'system', 'light', 'dark'] as const

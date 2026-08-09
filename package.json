@@ -1,6 +1,6 @@
 {
-  "name": "vscode-tools",
-  "displayName": "VS Code Tools",
+  "name": "staple-vscode",
+  "displayName": "Staple",
   "version": "0.1.0",
   "description": "Essential VS Code utilities packaged as a single lightweight, performant extension",
   "categories": [
@@ -10,9 +10,9 @@
   "publisher": "gabrielecanepa",
   "repository": {
     "type": "https",
-    "url": "https://github.com/gabrielecanepa/vscode-tools"
+    "url": "https://github.com/gabrielecanepa/staple-vscode"
   },
-  "icon": "icon.png",
+  "icon": "./media/icon.png",
   "main": "./dist/extension.js",
   "packageManager": "pnpm@11.17.0",
   "scripts": {
@@ -24,7 +24,7 @@
     "check:types": "tsc --noEmit",
     "fix": "oxlint --fix && oxfmt",
     "test": "node scripts/test.mts",
-    "deploy": "pnpm run package && code --install-extension vscode-tools-$npm_package_version.vsix",
+    "deploy": "pnpm run package && code --install-extension staple-vscode-$npm_package_version.vsix",
     "package": "pnpm run check && vsce package --no-dependencies",
     "vscode:prepublish": "pnpm run build"
   },
@@ -119,80 +119,80 @@
     ],
     "commands": [
       {
-        "command": "vscodeTools.toggleQuotes",
+        "command": "staple.toggleQuotes",
         "title": "Toggle Quotes",
-        "category": "VS Code Tools"
+        "category": "Staple"
       },
       {
-        "command": "vscodeTools.optimizeImage",
+        "command": "staple.optimizeImage",
         "title": "Optimize Image",
-        "category": "VS Code Tools"
+        "category": "Staple"
       },
       {
-        "command": "vscodeTools.optimizeFolderImages",
+        "command": "staple.optimizeFolderImages",
         "title": "Optimize Images in Folder",
-        "category": "VS Code Tools"
+        "category": "Staple"
       },
       {
-        "command": "vscodeTools.sortObjectsByKey",
+        "command": "staple.sortObjectsByKey",
         "title": "Sort Objects By Key",
-        "category": "VS Code Tools",
-        "enablement": "config.vscodeTools.sortObjectsByKey.enabled && !editorReadonly && (editorLangId == json || config.vscodeTools.sortObjectsByKey.allowNonJson)"
+        "category": "Staple",
+        "enablement": "config.staple.sortObjectsByKey.enabled && !editorReadonly && (editorLangId == json || config.staple.sortObjectsByKey.allowNonJson)"
       }
     ],
     "menus": {
       "explorer/context": [
         {
-          "command": "vscodeTools.optimizeImage",
-          "when": "config.vscodeTools.optimizeImages.app && !explorerResourceIsFolder && resourceExtname =~ /\\.(png|jpe?g|gif|svg|webp|avif|tiff?|bmp)$/i",
+          "command": "staple.optimizeImage",
+          "when": "config.staple.optimizeImages.app && !explorerResourceIsFolder && resourceExtname =~ /\\.(png|jpe?g|gif|svg|webp|avif|tiff?|bmp)$/i",
           "group": "7_modification"
         },
         {
-          "command": "vscodeTools.optimizeFolderImages",
-          "when": "config.vscodeTools.optimizeImages.app && explorerResourceIsFolder",
+          "command": "staple.optimizeFolderImages",
+          "when": "config.staple.optimizeImages.app && explorerResourceIsFolder",
           "group": "7_modification"
         }
       ],
       "editor/title/context": [
         {
-          "command": "vscodeTools.optimizeImage",
-          "when": "config.vscodeTools.optimizeImages.app && resourceExtname =~ /\\.(png|jpe?g|gif|svg|webp|avif|tiff?|bmp)$/i",
+          "command": "staple.optimizeImage",
+          "when": "config.staple.optimizeImages.app && resourceExtname =~ /\\.(png|jpe?g|gif|svg|webp|avif|tiff?|bmp)$/i",
           "group": "7_modification"
         }
       ],
       "commandPalette": [
         {
-          "command": "vscodeTools.optimizeImage",
-          "when": "config.vscodeTools.optimizeImages.app"
+          "command": "staple.optimizeImage",
+          "when": "config.staple.optimizeImages.app"
         },
         {
-          "command": "vscodeTools.optimizeFolderImages",
+          "command": "staple.optimizeFolderImages",
           "when": "false"
         },
         {
-          "command": "vscodeTools.sortObjectsByKey",
-          "when": "config.vscodeTools.sortObjectsByKey.enabled && (editorLangId == json || config.vscodeTools.sortObjectsByKey.allowNonJson)"
+          "command": "staple.sortObjectsByKey",
+          "when": "config.staple.sortObjectsByKey.enabled && (editorLangId == json || config.staple.sortObjectsByKey.allowNonJson)"
         }
       ]
     },
     "keybindings": [
       {
-        "command": "vscodeTools.toggleQuotes",
+        "command": "staple.toggleQuotes",
         "key": "ctrl+'",
         "mac": "cmd+'",
         "when": "editorTextFocus"
       }
     ],
     "configuration": {
-      "title": "VS Code Tools",
+      "title": "Staple",
       "properties": {
-        "vscodeTools.gitInstantRefresh.enabled": {
+        "staple.instantGitRefresh.enabled": {
           "type": "boolean",
           "default": true,
           "scope": "resource",
           "description": "Refresh the built-in Git view immediately when a repository changes outside VS Code."
         },
-        "vscodeTools.gitInstantRefresh.delay": {
+        "staple.instantGitRefresh.delay": {
           "type": "number",
           "default": 200,
           "minimum": 0,
@@ -200,31 +200,31 @@
           "scope": "resource",
           "description": "Debounce delay in milliseconds between a detected .git change and the forced refresh."
         },
-        "vscodeTools.ghosttySyntax.enabled": {
+        "staple.ghosttySyntax.enabled": {
           "type": "boolean",
           "default": true,
           "scope": "application",
           "description": "Enable Ghostty config support."
         },
-        "vscodeTools.ghosttySyntax.autoAssociations": {
+        "staple.ghosttySyntax.autoAssociations": {
           "type": "boolean",
           "default": true,
           "scope": "application",
           "description": "Add files.associations entries so the config file and theme files inside a ghostty directory use the Ghostty language, including in the file explorer. Disabling removes the entries this extension added."
         },
-        "vscodeTools.optimizeImages.app": {
+        "staple.optimizeImages.app": {
           "type": "string",
           "default": "",
           "scope": "machine",
           "description": "Name of the optimizer app to open images with, for example \"ImageOptim\". The feature stays hidden until this is set. Machine-scoped so a workspace cannot point it at an arbitrary executable."
         },
-        "vscodeTools.optimizeImages.imageRegex": {
+        "staple.optimizeImages.imageRegex": {
           "type": "string",
           "default": "\\.(png|jpe?g|gif|svg|webp|avif|tiff?|bmp)$",
           "scope": "resource",
           "description": "Case-insensitive regex matching image files found when optimizing a folder."
         },
-        "vscodeTools.optimizeImages.searchIgnoreFolders": {
+        "staple.optimizeImages.searchIgnoreFolders": {
           "type": "array",
           "items": {
             "type": "string"
@@ -238,59 +238,59 @@
           "scope": "resource",
           "description": "Folder names skipped when searching a folder recursively."
         },
-        "vscodeTools.optimizeImages.confirmThreshold": {
+        "staple.optimizeImages.confirmThreshold": {
           "type": "number",
           "default": 50,
           "minimum": 1,
           "scope": "resource",
           "description": "Ask for confirmation before optimizing a folder that contains more than this many images."
         },
-        "vscodeTools.sortObjectsByKey.enabled": {
+        "staple.sortObjectsByKey.enabled": {
           "type": "boolean",
           "default": true,
           "scope": "resource",
           "description": "Enable the Sort Objects By Key command."
         },
-        "vscodeTools.sortObjectsByKey.allowNonJson": {
+        "staple.sortObjectsByKey.allowNonJson": {
           "type": "boolean",
           "default": false,
           "scope": "resource",
           "description": "Allow the Sort Objects By Key command outside the JSON language mode. The file contents must still be valid JSON."
         },
-        "vscodeTools.toml.enabled": {
+        "staple.toml.enabled": {
           "type": "boolean",
           "default": true,
           "scope": "resource",
           "description": "Enable TOML diagnostics, formatting, completion, hover, folding, outline navigation, and symbol renaming."
         },
-        "vscodeTools.toml.completion.maxKeys": {
+        "staple.toml.completion.maxKeys": {
           "type": "integer",
           "default": 5,
           "minimum": 0,
           "scope": "resource",
           "description": "Maximum number of dotted keys shown in a TOML completion item. Set to 0 to disable key completions."
         },
-        "vscodeTools.toml.schema.links": {
+        "staple.toml.schema.links": {
           "type": "boolean",
           "default": false,
           "scope": "resource",
           "description": "Show schema-provided links on TOML keys."
         },
-        "vscodeTools.toml.schema.cache.memoryExpiration": {
+        "staple.toml.schema.cache.memoryExpiration": {
           "type": "integer",
           "default": 60,
           "minimum": 0,
           "scope": "resource",
           "description": "Seconds before an in-memory TOML schema cache entry expires."
         },
-        "vscodeTools.toml.schema.cache.diskExpiration": {
+        "staple.toml.schema.cache.diskExpiration": {
           "type": "integer",
           "default": 600,
           "minimum": 0,
           "scope": "resource",
           "description": "Seconds before a cached TOML schema is fetched again."
         },
-        "vscodeTools.toml.formatter.alignEntries": {
+        "staple.toml.formatter.alignEntries": {
           "type": [
             "boolean",
             "null"
@@ -299,7 +299,7 @@
           "scope": "resource",
           "description": "Align consecutive TOML entries vertically."
         },
-        "vscodeTools.toml.formatter.alignComments": {
+        "staple.toml.formatter.alignComments": {
           "type": [
             "boolean",
             "null"
@@ -308,7 +308,7 @@
           "scope": "resource",
           "description": "Align consecutive trailing comments vertically."
         },
-        "vscodeTools.toml.formatter.arrayTrailingComma": {
+        "staple.toml.formatter.arrayTrailingComma": {
           "type": [
             "boolean",
             "null"
@@ -317,7 +317,7 @@
           "scope": "resource",
           "description": "Add trailing commas to multiline arrays."
         },
-        "vscodeTools.toml.formatter.arrayAutoExpand": {
+        "staple.toml.formatter.arrayAutoExpand": {
           "type": [
             "boolean",
             "null"
@@ -326,7 +326,7 @@
           "scope": "resource",
           "description": "Expand arrays to multiple lines when needed."
         },
-        "vscodeTools.toml.formatter.inlineTableExpand": {
+        "staple.toml.formatter.inlineTableExpand": {
           "type": [
             "boolean",
             "null"
@@ -335,7 +335,7 @@
           "scope": "resource",
           "description": "Expand inline table values to multiple lines."
         },
-        "vscodeTools.toml.formatter.arrayAutoCollapse": {
+        "staple.toml.formatter.arrayAutoCollapse": {
           "type": [
             "boolean",
             "null"
@@ -344,7 +344,7 @@
           "scope": "resource",
           "description": "Collapse arrays that fit on one line."
         },
-        "vscodeTools.toml.formatter.compactArrays": {
+        "staple.toml.formatter.compactArrays": {
           "type": [
             "boolean",
             "null"
@@ -353,7 +353,7 @@
           "scope": "resource",
           "description": "Omit padding inside single-line arrays."
         },
-        "vscodeTools.toml.formatter.compactInlineTables": {
+        "staple.toml.formatter.compactInlineTables": {
           "type": [
             "boolean",
             "null"
@@ -362,7 +362,7 @@
           "scope": "resource",
           "description": "Omit padding inside inline tables."
         },
-        "vscodeTools.toml.formatter.compactEntries": {
+        "staple.toml.formatter.compactEntries": {
           "type": [
             "boolean",
             "null"
@@ -371,7 +371,7 @@
           "scope": "resource",
           "description": "Omit spaces around entry equals signs."
         },
-        "vscodeTools.toml.formatter.columnWidth": {
+        "staple.toml.formatter.columnWidth": {
           "type": [
             "number",
             "null"
@@ -381,7 +381,7 @@
           "scope": "resource",
           "description": "Target column width used when expanding arrays."
         },
-        "vscodeTools.toml.formatter.indentTables": {
+        "staple.toml.formatter.indentTables": {
           "type": [
             "boolean",
             "null"
@@ -390,7 +390,7 @@
           "scope": "resource",
           "description": "Indent subtables when they appear in order."
         },
-        "vscodeTools.toml.formatter.indentEntries": {
+        "staple.toml.formatter.indentEntries": {
           "type": [
             "boolean",
             "null"
@@ -399,7 +399,7 @@
           "scope": "resource",
           "description": "Indent entries under their tables."
         },
-        "vscodeTools.toml.formatter.indentString": {
+        "staple.toml.formatter.indentString": {
           "type": [
             "string",
             "null"
@@ -408,7 +408,7 @@
           "scope": "resource",
           "description": "Indentation string. By default, the editor tab size and space setting are used."
         },
-        "vscodeTools.toml.formatter.trailingNewline": {
+        "staple.toml.formatter.trailingNewline": {
           "type": [
             "boolean",
             "null"
@@ -417,7 +417,7 @@
           "scope": "resource",
           "description": "Add a trailing newline."
         },
-        "vscodeTools.toml.formatter.reorderKeys": {
+        "staple.toml.formatter.reorderKeys": {
           "type": [
             "boolean",
             "null"
@@ -426,7 +426,7 @@
           "scope": "resource",
           "description": "Sort keys that are not separated by blank lines."
         },
-        "vscodeTools.toml.formatter.reorderArrays": {
+        "staple.toml.formatter.reorderArrays": {
           "type": [
             "boolean",
             "null"
@@ -435,7 +435,7 @@
           "scope": "resource",
           "description": "Sort array values that are not separated by blank lines."
         },
-        "vscodeTools.toml.formatter.reorderInlineTables": {
+        "staple.toml.formatter.reorderInlineTables": {
           "type": [
             "boolean",
             "null"
@@ -444,7 +444,7 @@
           "scope": "resource",
           "description": "Sort inline table entries."
         },
-        "vscodeTools.toml.formatter.allowedBlankLines": {
+        "staple.toml.formatter.allowedBlankLines": {
           "type": [
             "number",
             "null"
@@ -454,7 +454,7 @@
           "scope": "resource",
           "description": "Maximum number of consecutive blank lines."
         },
-        "vscodeTools.toml.formatter.crlf": {
+        "staple.toml.formatter.crlf": {
           "type": [
             "boolean",
             "null"
@@ -463,13 +463,13 @@
           "scope": "resource",
           "description": "Use CRLF line endings."
         },
-        "vscodeTools.markdown.enabled": {
+        "staple.markdown.enabled": {
           "type": "boolean",
           "default": true,
           "scope": "window",
           "description": "Enable the Markdown preview features. Turning it off restores the built-in preview."
         },
-        "vscodeTools.markdown.mode": {
+        "staple.markdown.mode": {
           "type": "string",
           "enum": [
             "auto",
@@ -493,7 +493,7 @@
           "scope": "window",
           "description": "How the Markdown preview picks between the light and dark theme."
         },
-        "vscodeTools.markdown.lightTheme": {
+        "staple.markdown.lightTheme": {
           "type": "string",
           "enum": [
             "default",
@@ -533,9 +533,9 @@
           ],
           "default": "github-light",
           "scope": "window",
-          "markdownDescription": "Theme used whenever the preview resolves to light. Ignored when `#vscodeTools.markdown.mode#` is `Single theme: Dark`."
+          "markdownDescription": "Theme used whenever the preview resolves to light. Ignored when `#staple.markdown.mode#` is `Single theme: Dark`."
         },
-        "vscodeTools.markdown.darkTheme": {
+        "staple.markdown.darkTheme": {
           "type": "string",
           "enum": [
             "default",
@@ -575,15 +575,15 @@
           ],
           "default": "github-dark",
           "scope": "window",
-          "markdownDescription": "Theme used whenever the preview resolves to dark. Ignored when `#vscodeTools.markdown.mode#` is `Single theme: Light`."
+          "markdownDescription": "Theme used whenever the preview resolves to dark. Ignored when `#staple.markdown.mode#` is `Single theme: Light`."
         },
-        "vscodeTools.markdown.taskLists": {
+        "staple.markdown.taskLists": {
           "type": "boolean",
           "default": true,
           "scope": "window",
           "markdownDescription": "Render `- [ ]` and `- [x]` list items as checkboxes. Works with every theme."
         },
-        "vscodeTools.markdown.checkboxes": {
+        "staple.markdown.checkboxes": {
           "type": "object",
           "default": {
             " ": "unchecked",
@@ -619,15 +619,15 @@
             ]
           },
           "scope": "window",
-          "markdownDescription": "Maps the character between the brackets of a task list item to the checkbox drawn for it. Your entries merge with the defaults, so `{ \"?\": \"indeterminate\" }` adds a character and `{ \"/\": null }` drops one. Only `[ ]` and `[x]` are GitHub Flavored Markdown; a file using any other character renders as literal text on github.com. Requires `#vscodeTools.markdown.taskLists#`."
+          "markdownDescription": "Maps the character between the brackets of a task list item to the checkbox drawn for it. Your entries merge with the defaults, so `{ \"?\": \"indeterminate\" }` adds a character and `{ \"/\": null }` drops one. Only `[ ]` and `[x]` are GitHub Flavored Markdown; a file using any other character renders as literal text on github.com. Requires `#staple.markdown.taskLists#`."
         },
-        "vscodeTools.toggleQuotes.enabled": {
+        "staple.toggleQuotes.enabled": {
           "type": "boolean",
           "default": true,
           "scope": "language-overridable",
           "description": "Enable the Toggle Quotes command."
         },
-        "vscodeTools.toggleQuotes.chars": {
+        "staple.toggleQuotes.chars": {
           "type": "array",
           "items": {
             "anyOf": [
@@ -657,42 +657,42 @@
     },
     "configurationDefaults": {
       "[javascript]": {
-        "vscodeTools.toggleQuotes.chars": [
+        "staple.toggleQuotes.chars": [
           "\"",
           "'",
           "`"
         ]
       },
       "[javascriptreact]": {
-        "vscodeTools.toggleQuotes.chars": [
+        "staple.toggleQuotes.chars": [
           "\"",
           "'",
           "`"
         ]
       },
       "[typescript]": {
-        "vscodeTools.toggleQuotes.chars": [
+        "staple.toggleQuotes.chars": [
           "\"",
           "'",
           "`"
         ]
       },
       "[typescriptreact]": {
-        "vscodeTools.toggleQuotes.chars": [
+        "staple.toggleQuotes.chars": [
           "\"",
           "'",
           "`"
         ]
       },
       "[vue]": {
-        "vscodeTools.toggleQuotes.chars": [
+        "staple.toggleQuotes.chars": [
           "\"",
           "'",
           "`"
         ]
       },
       "[markdown]": {
-        "vscodeTools.toggleQuotes.chars": [
+        "staple.toggleQuotes.chars": [
           "\"",
           "'",
           "`"

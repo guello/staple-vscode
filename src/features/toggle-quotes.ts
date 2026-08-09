@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 
-const SECTION = 'vscodeTools.toggleQuotes'
+const SECTION = 'staple.toggleQuotes'
 
 interface QuotePair {
   begin: string
@@ -107,7 +107,7 @@ function toggleLine(line: string, column: number, pairs: QuotePair[]): ToggleEdi
 
 export function activateToggleQuotes(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
-    vscode.commands.registerTextEditorCommand('vscodeTools.toggleQuotes', editor => {
+    vscode.commands.registerTextEditorCommand('staple.toggleQuotes', editor => {
       const scope = { uri: editor.document.uri, languageId: editor.document.languageId }
       const config = vscode.workspace.getConfiguration(SECTION, scope)
       if (!config.get('enabled', true)) return

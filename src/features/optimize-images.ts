@@ -6,7 +6,7 @@ import * as vscode from 'vscode'
 
 const execFileAsync = promisify(execFile)
 
-const SECTION = 'vscodeTools.optimizeImages'
+const SECTION = 'staple.optimizeImages'
 const DEFAULT_IMAGE_REGEX = '\\.(png|jpe?g|gif|svg|webp|avif|tiff?|bmp)$'
 const DEFAULT_IGNORE_FOLDERS = ['.git', '.svn', 'node_modules', 'bower_components']
 
@@ -81,7 +81,7 @@ const basename = (uri: vscode.Uri) => uri.path.slice(uri.path.lastIndexOf('/') +
 
 const noAppConfigured = () => {
   void vscode.window.showErrorMessage(
-    'Optimize Image: set an app name in the "vscodeTools.optimizeImages.app" setting first.'
+    'Optimize Image: set an app name in the "staple.optimizeImages.app" setting first.'
   )
 }
 
@@ -147,7 +147,7 @@ const optimizeFolder = async (arg: unknown): Promise<void> => {
 
 export function activateOptimizeImage(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
-    vscode.commands.registerCommand('vscodeTools.optimizeImage', optimizeImage),
-    vscode.commands.registerCommand('vscodeTools.optimizeFolderImages', optimizeFolder)
+    vscode.commands.registerCommand('staple.optimizeImage', optimizeImage),
+    vscode.commands.registerCommand('staple.optimizeFolderImages', optimizeFolder)
   )
 }

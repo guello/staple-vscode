@@ -15,7 +15,7 @@ interface GitExtensionExports {
   getAPI(version: 1): GitApi
 }
 
-const SECTION = 'vscodeTools.gitInstantRefresh'
+const SECTION = 'staple.instantGitRefresh'
 const METADATA_GLOB = '.git/{HEAD,ORIG_HEAD,FETCH_HEAD,MERGE_HEAD,CHERRY_PICK_HEAD,REBASE_HEAD,index,packed-refs}'
 const REFS_GLOB = '.git/refs/**'
 
@@ -69,7 +69,7 @@ function trackRepository(repository: GitRepository): vscode.Disposable {
   })
 }
 
-export async function activateGitInstantRefresh(context: vscode.ExtensionContext): Promise<void> {
+export async function activateInstantGitRefresh(context: vscode.ExtensionContext): Promise<void> {
   const gitExtension = vscode.extensions.getExtension<GitExtensionExports>('vscode.git')
   if (!gitExtension) return
 

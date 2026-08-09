@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 
-const SECTION = 'vscodeTools.ghosttySyntax'
+const SECTION = 'staple.ghosttySyntax'
 const LANGUAGE_ID = 'ghostty'
 const GLOBS = [
   '**/ghostty/config',

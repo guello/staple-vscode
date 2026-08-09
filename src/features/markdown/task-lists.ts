@@ -49,7 +49,7 @@ const strip = (value: string) => {
 }
 
 export const taskLists = (md: MarkdownIt, resolve: () => TaskListOptions) => {
-  md.core.ruler.push('vscodeToolsTaskLists', state => {
+  md.core.ruler.push('stapleTaskLists', state => {
     const options = resolve()
     if (!options.enabled) return
 

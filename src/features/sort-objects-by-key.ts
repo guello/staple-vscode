@@ -266,7 +266,7 @@ export const reorderJsonObjects = (document: JsonObjectDocument, items: JsonObje
   return result + document.suffix
 }
 
-const COMMAND = 'vscodeTools.sortObjectsByKey'
+const COMMAND = 'staple.sortObjectsByKey'
 
 const run = async (): Promise<void> => {
   const editor = vscode.window.activeTextEditor

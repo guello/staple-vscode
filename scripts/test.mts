@@ -4,7 +4,7 @@ import { glob } from 'node:fs/promises'
 
 import { type Plugin, build } from 'esbuild'
 
-const OUTPUT_DIR = 'node_modules/.cache/vscode-tools'
+const OUTPUT_DIR = 'node_modules/.cache/staple-vscode'
 
 const stubVscode: Plugin = {
   name: 'stub-vscode',

@@ -2,7 +2,7 @@ import * as vscode from 'vscode'
 
 import { LanguageClient, type LanguageClientOptions, TransportKind } from 'vscode-languageclient/node'
 
-const SECTION = 'vscodeTools.toml'
+const SECTION = 'staple.toml'
 const FORMATTER_SETTINGS = [
   'alignEntries',
   'alignComments',
@@ -90,5 +90,5 @@ export const createTomlClient = async (context: vscode.ExtensionContext) => {
     },
   }
 
-  return new LanguageClient('vscodeTools.toml', 'VS Code Tools: TOML', { run: server, debug: server }, clientOptions)
+  return new LanguageClient('staple.toml', 'Staple: TOML', { run: server, debug: server }, clientOptions)
 }
