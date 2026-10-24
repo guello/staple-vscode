@@ -19,15 +19,13 @@ const SECTION = 'staple.instantGitRefresh'
 const METADATA_GLOB = '.git/{HEAD,ORIG_HEAD,FETCH_HEAD,MERGE_HEAD,CHERRY_PICK_HEAD,REBASE_HEAD,index,packed-refs}'
 const REFS_GLOB = '.git/refs/**'
 
-function isEnabled(scope: vscode.ConfigurationScope | null): boolean {
-  return vscode.workspace.getConfiguration(SECTION, scope).get('enabled', true)
-}
+const isEnabled = (scope: vscode.ConfigurationScope | null): boolean =>
+  vscode.workspace.getConfiguration(SECTION, scope).get('enabled', true)
 
-function delayFor(scope: vscode.ConfigurationScope): number {
-  return Math.max(0, vscode.workspace.getConfiguration(SECTION, scope).get('delay', 200))
-}
+const delayFor = (scope: vscode.ConfigurationScope): number =>
+  Math.max(0, vscode.workspace.getConfiguration(SECTION, scope).get('delay', 200))
 
-function trackRepository(repository: GitRepository): vscode.Disposable {
+const trackRepository = (repository: GitRepository): vscode.Disposable => {
   const watchers = [METADATA_GLOB, REFS_GLOB].map(glob =>
     vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(repository.rootUri, glob))
   )
@@ -69,7 +67,7 @@ function trackRepository(repository: GitRepository): vscode.Disposable {
   })
 }
 
-export async function activateInstantGitRefresh(context: vscode.ExtensionContext): Promise<void> {
+export const activateInstantGitRefresh = async (context: vscode.ExtensionContext): Promise<void> => {
   const gitExtension = vscode.extensions.getExtension<GitExtensionExports>('vscode.git')
   if (!gitExtension) return
 

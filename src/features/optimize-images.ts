@@ -145,7 +145,7 @@ const optimizeFolder = async (arg: unknown): Promise<void> => {
   }
 }
 
-export function activateOptimizeImage(context: vscode.ExtensionContext): void {
+export const activateOptimizeImage = (context: vscode.ExtensionContext): void => {
   context.subscriptions.push(
     vscode.commands.registerCommand('staple.optimizeImage', optimizeImage),
     vscode.commands.registerCommand('staple.optimizeFolderImages', optimizeFolder)

@@ -13,7 +13,7 @@ interface ToggleEdit {
   text: string
 }
 
-function normalizeChars(raw: unknown): QuotePair[] {
+const normalizeChars = (raw: unknown): QuotePair[] => {
   if (!Array.isArray(raw)) return []
   const pairs: QuotePair[] = []
   for (const item of raw) {
@@ -33,13 +33,13 @@ function normalizeChars(raw: unknown): QuotePair[] {
   return pairs
 }
 
-function isEscaped(line: string, index: number): boolean {
+const isEscaped = (line: string, index: number): boolean => {
   let backslashes = 0
   for (let i = index - 1; i >= 0 && line[i] === '\\'; i--) backslashes++
   return backslashes % 2 === 1
 }
 
-function occurrences(line: string, token: string): number[] {
+const occurrences = (line: string, token: string): number[] => {
   const found: number[] = []
   let index = line.indexOf(token)
   while (index !== -1) {
@@ -55,7 +55,7 @@ interface Enclosing {
   end: number
 }
 
-function findSymmetric(line: string, column: number, pair: QuotePair, pairIndex: number): Enclosing | undefined {
+const findSymmetric = (line: string, column: number, pair: QuotePair, pairIndex: number): Enclosing | undefined => {
   const spots = occurrences(line, pair.begin)
   for (let i = 0; i + 1 < spots.length; i += 2) {
     const begin = spots[i]
@@ -65,7 +65,7 @@ function findSymmetric(line: string, column: number, pair: QuotePair, pairIndex:
   return undefined
 }
 
-function findAsymmetric(line: string, column: number, pair: QuotePair, pairIndex: number): Enclosing | undefined {
+const findAsymmetric = (line: string, column: number, pair: QuotePair, pairIndex: number): Enclosing | undefined => {
   const begins = occurrences(line, pair.begin).filter(index => index <= column)
   const begin = begins[begins.length - 1]
   if (begin === undefined) return undefined
@@ -74,7 +74,7 @@ function findAsymmetric(line: string, column: number, pair: QuotePair, pairIndex
   return { pairIndex, begin, end }
 }
 
-function convertBody(body: string, from: QuotePair, to: QuotePair): string {
+const convertBody = (body: string, from: QuotePair, to: QuotePair): string => {
   let result = body
   if (from.begin === from.end && from.begin.length === 1) {
     result = result.replaceAll(`\\${from.begin}`, from.begin)
@@ -85,7 +85,7 @@ function convertBody(body: string, from: QuotePair, to: QuotePair): string {
   return result
 }
 
-function toggleLine(line: string, column: number, pairs: QuotePair[]): ToggleEdit | undefined {
+const toggleLine = (line: string, column: number, pairs: QuotePair[]): ToggleEdit | undefined => {
   let innermost: Enclosing | undefined
   for (let i = 0; i < pairs.length; i++) {
     const pair = pairs[i]
@@ -105,7 +105,7 @@ function toggleLine(line: string, column: number, pairs: QuotePair[]): ToggleEdi
   }
 }
 
-export function activateToggleQuotes(context: vscode.ExtensionContext): void {
+export const activateToggleQuotes = (context: vscode.ExtensionContext): void => {
   context.subscriptions.push(
     vscode.commands.registerTextEditorCommand('staple.toggleQuotes', editor => {
       const scope = { uri: editor.document.uri, languageId: editor.document.languageId }
