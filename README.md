@@ -11,15 +11,19 @@ Essential Visual Studio Code utilities packaged as a single lightweight, perform
 
 - [Instant Git Refresh](#instant-git-refresh)
 - [Markdown Preview](#markdown-preview)
+  - [GitHub themes](#github-themes)
+  - [Task lists](#task-lists)
 - [Toggle Quotes](#toggle-quotes)
 - [Sort Objects By Key](#sort-objects-by-key)
 - [TOML](#toml)
+  - [Language server](#language-server)
+  - [Schema support](#schema-support)
 - [Ghostty Syntax](#ghostty-syntax)
 - [Optimize Images](#optimize-images)
 
 ### Instant Git Refresh
 
-Refreshes the built-in Git view (Source Control changes list) as soon as a repository changes outside VS Code: GitLens actions, terminal git commands, external tools. The built-in `vscode.git` extension reacts to external `.git` changes through a hardcoded slow path (1s debounce, wait for idle, then a 5s trailing throttle) with no setting to tune it. This feature watches `.git` metadata (HEAD, index, refs, merge state) in every open repository and calls the Git API's `repository.status()` directly.
+Refreshes the built-in Git view (Source Control changes list) as soon as a repository changes outside VS Code: GitLens actions, terminal git commands, external tools. The built-in `vscode.git` extension reacts to external `.git` changes through a hardcoded slow path (1s debounce, wait for idle, then a 5s trailing throttle) with no setting to change it. This feature watches `.git` metadata (HEAD, index, refs, merge state) in every open repository and calls the Git API's `repository.status()` directly.
 
 | Setting                            | Default | Description                                  |
 | ---------------------------------- | ------- | -------------------------------------------- |
@@ -28,7 +32,7 @@ Refreshes the built-in Git view (Source Control changes list) as soon as a repos
 
 ### Markdown Preview
 
-Restyles the built-in Markdown preview and adds task lists. Nine GitHub themes ship with it: light and dark, their high contrast, Protanopia and Deuteranopia, and Tritanopia variants, plus dark dimmed. By default the preview follows your editor theme, and it resolves correctly under both high contrast themes.
+Restyles the built-in Markdown preview with 9 GitHub themes and task lists support. By default, the preview follows the editor theme and resolves automatically under both high contrast themes.
 
 | Setting                      | Default        | Description                                                                           |
 | ---------------------------- | -------------- | ------------------------------------------------------------------------------------- |
@@ -39,11 +43,24 @@ Restyles the built-in Markdown preview and adds task lists. Nine GitHub themes s
 | `staple.markdown.taskLists`  | `true`         | Render `- [ ]` and `- [x]` list items as checkboxes.                                  |
 | `staple.markdown.checkboxes` | see below      | Maps the character between the brackets to the checkbox drawn for it.                 |
 
-Both theme settings accept `default`, `github-light`, `github-light-high-contrast`, `github-light-colorblind`, `github-light-tritanopia`, `github-dark`, `github-dark-high-contrast`, `github-dark-colorblind`, `github-dark-tritanopia`, and `github-dark-dimmed`. Picking `default` leaves that mode with VS Code's own preview styling, so you can style only light or only dark.
+#### GitHub themes
 
-Task lists work with every theme, `default` included, and render as disabled checkboxes with the same markup GitHub emits. The box copies GitHub's own: a rounded square just under the size of the surrounding text, a 1px border, and GitHub's check mark, with the dash and cross drawn at the same stroke weight, so size, spacing and color stay identical across states instead of varying with the browser's native control. Under a GitHub theme every color comes from that theme's tokens; under `default` the filled states use a blue that holds up on light and dark editors.
+Both theme settings accept `default`, `github-light`, `github-light-high-contrast`, `github-light-colorblind`, `github-light-tritanopia`, `github-dark`, `github-dark-high-contrast`, `github-dark-colorblind`, `github-dark-tritanopia`, and `github-dark-dimmed`.
 
-`staple.markdown.checkboxes` decides which character between the brackets produces which box. Four states exist: `unchecked` is an empty box, `checked` is a filled box with a check mark, `indeterminate` is a filled box with a dash, and `cancelled` is a muted box with a cross whose label is struck through and muted. These are the defaults:
+Using `default` leaves the mode with VS Code's own preview styling, so only light or dark can be applied.
+
+#### Task lists
+
+Task lists work with every theme, `default` included, and render the same markup used by GitHub.
+
+`staple.markdown.checkboxes` controls the symbol produced by characters between square brackets. The following four states can be rendered.
+
+- `unchecked`: empty box
+- `checked`: filled box with check mark
+- `indeterminate`: filled box with dash
+- `cancelled`: muted box with strike-through label
+
+The default mapping, merged with custom entries, is:
 
 ```jsonc
 "staple.markdown.checkboxes": {
@@ -56,10 +73,6 @@ Task lists work with every theme, `default` included, and render as disabled che
 }
 ```
 
-Your entries merge with those defaults rather than replacing them, so `{ "?": "indeterminate" }` adds a character and `{ "/": null }` drops one. Only `[ ]` and `[x]` are GitHub Flavored Markdown; every other character renders as literal text on github.com, and no convention agrees on the rest. Org mode has used `[-]` for a partly checked parent since long before any of this, while the Obsidian Tasks plugin reads `[-]` as cancelled and `[/]` as in progress. The defaults follow Org mode and accept `[/]` as well. To match GitHub exactly, unset everything else: `{ "-": null, "/": null, "~": null }`.
-
-Only the preview is affected. Other GitHub features that change the rendered HTML, such as `:emoji:` shortcodes, still need their own extensions. Another installed extension that renders task lists, such as Markdown All in One, parses `[ ]` and `[x]` first and its markup wins; the checkbox styling still applies to it, so both agree visually.
-
 ### Toggle Quotes
 
 Cycles the quotes around the cursor with `cmd+'` (`ctrl+'` on Windows and Linux). Supports multiple cursors and escapes or unescapes inner quotes when cycling.
@@ -71,15 +84,44 @@ Cycles the quotes around the cursor with `cmd+'` (`ctrl+'` on Windows and Linux)
 
 ### Sort Objects By Key
 
-Run **Staple: Sort Objects By Key** from the Command Palette while editing a JSON file. The command reads the top-level array, lists every key found across its objects, and sorts the objects by the selected key in ascending order. Objects without that key stay at the end in their original order.
+Run **Staple: Sort Objects By Key** from the Command Palette while editing a JSON file. The command reads the top-level array, lists every key found across its objects, and sorts the objects by the selected key in ascending order.
 
-The command is available for JSON files by default. Set `staple.sortObjectsByKey.enabled` to `false` to disable it. Set `staple.sortObjectsByKey.allowNonJson` to `true` to use it in another language mode; the file must still contain valid JSON. You can assign a shortcut to `staple.sortObjectsByKey` from the Keyboard Shortcuts editor.
+| Setting                                | Default | Description                                                                         |
+| -------------------------------------- | ------- | ----------------------------------------------------------------------------------- |
+| `staple.sortObjectsByKey.enabled`      | `true`  | Enable the command.                                                                 |
+| `staple.sortObjectsByKey.allowNonJson` | `false` | Allow the command in another language mode. The file must still contain valid JSON. |
+
+You can assign a shortcut to `staple.sortObjectsByKey` from the Keyboard Shortcuts editor.
 
 ### TOML
 
-TOML files, `Cargo.lock`, and `uv.lock` get syntax highlighting, comment and bracket editing, diagnostics, formatting, schema completion and validation, hover details, folding, document symbols, links, and symbol renaming. TOML fenced code blocks and `+++` frontmatter are highlighted in Markdown. The Taplo language server starts only after a TOML document is opened and stops when no TOML documents remain open.
+Adds the following essential features to TOML files, `Cargo.lock`, and `uv.lock`:
 
-Associate a JSON Schema by placing one of these declarations before any TOML table or value:
+- Syntax highlighting
+- Comment and bracket editing
+- Diagnostics
+- Formatting
+- Schema completion, validation, and hover details
+- Folding, document symbols, links, and symbol renaming
+
+| Setting                                     | Default | Description                                     |
+| ------------------------------------------- | ------- | ----------------------------------------------- |
+| `staple.toml.enabled`                       | `true`  | Enable the TOML language server features.       |
+| `staple.toml.completion.maxKeys`            | `5`     | Limit dotted keys shown in completion items.    |
+| `staple.toml.schema.links`                  | `false` | Show links given by the active schema.          |
+| `staple.toml.schema.cache.memoryExpiration` | `60`    | In-memory schema entries expiration in seconds. |
+| `staple.toml.schema.cache.diskExpiration`   | `600`   | Cached schemas refresh interval in seconds.     |
+| `staple.toml.formatter.*`                   | `null`  | Override individual formatter options.          |
+
+#### Language server
+
+The TOML grammar and language server are derived from [Taplo and Even Better TOML](https://github.com/tamasfe/taplo) by Ferenc Tamás (MIT).
+
+The language server is optimized to start only after a TOML document is opened, and stop when no TOML documents remain open.
+
+#### Schema support
+
+Associate a JSON schema by placing one of these declarations before any TOML table or value:
 
 ```toml
 "$schema" = "./schema.json"
