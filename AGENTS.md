@@ -1,6 +1,6 @@
 # Staple
 
-Visual Studio Code extension collecting small editor utilities that would otherwise be seven separate installs. It is the origin of the standard [staple-chrome](https://github.com/gabrielecanepa/staple-chrome) follows: minimal dependencies, hand-written build scripts, oxfmt plus oxlint plus knip plus tsc as the only gates, one folder per feature with an `enabled` setting, conventional commits.
+Visual Studio Code extension collecting small editor utilities that would otherwise be seven separate installs. It is the origin of the standard [staple-chrome](https://github.com/guello/staple-chrome) follows: minimal dependencies, hand-written build scripts, oxfmt plus oxlint plus knip plus tsc as the only gates, one folder per feature with an `enabled` setting, conventional commits.
 
 ## Commands
 

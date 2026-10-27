@@ -7,10 +7,10 @@
     "Other"
   ],
   "license": "MIT",
-  "publisher": "gabrielecanepa",
+  "publisher": "guello",
   "repository": {
     "type": "https",
-    "url": "https://github.com/gabrielecanepa/staple-vscode"
+    "url": "https://github.com/guello/staple-vscode"
   },
   "icon": "./media/icon.png",
   "main": "./dist/extension.js",
