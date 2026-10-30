@@ -1,5 +1,7 @@
 import * as vscode from 'vscode'
 
+import { type GhosttyReference, type GhosttyToken, describeToken, findToken, parseReference } from './reference'
+
 const SECTION = 'staple.ghosttySyntax'
 const LANGUAGE_ID = 'ghostty'
 const GLOBS = [
@@ -9,6 +11,7 @@ const GLOBS = [
   '**/com.mitchellh.ghostty/themes/*',
 ]
 const HEX = /#([0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/g
+const REFERENCE_DIR = 'languages/ghostty/reference'
 
 const autoAssociationsEnabled = (): boolean => {
   const config = vscode.workspace.getConfiguration(SECTION)
@@ -88,11 +91,45 @@ const colorProvider: vscode.DocumentColorProvider = {
   },
 }
 
+const readReference = async (extensionUri: vscode.Uri): Promise<GhosttyReference | undefined> => {
+  const read = async (name: string): Promise<string> =>
+    new TextDecoder().decode(await vscode.workspace.fs.readFile(vscode.Uri.joinPath(extensionUri, REFERENCE_DIR, name)))
+
+  try {
+    const [options, actions] = await Promise.all([read('options.txt'), read('actions.txt')])
+    return parseReference(options, actions)
+  } catch {
+    return undefined
+  }
+}
+
+const createHoverProvider = (extensionUri: vscode.Uri): vscode.HoverProvider => {
+  let reference: Promise<GhosttyReference | undefined> | undefined
+
+  const toHover = async (token: GhosttyToken, line: number): Promise<vscode.Hover | undefined> => {
+    reference ??= readReference(extensionUri)
+    const loaded = await reference
+    const markdown = loaded && describeToken(token, loaded)
+    return markdown
+      ? new vscode.Hover(new vscode.MarkdownString(markdown), new vscode.Range(line, token.start, line, token.end))
+      : undefined
+  }
+
+  return {
+    provideHover(document, position) {
+      const enabled = vscode.workspace.getConfiguration(SECTION).get('enabled', true)
+      const token = enabled ? findToken(document.lineAt(position.line).text, position.character) : undefined
+      return token && toHover(token, position.line)
+    },
+  }
+}
+
 export const activateGhosttySyntax = (context: vscode.ExtensionContext): void => {
   void syncAssociations()
 
   context.subscriptions.push(
     vscode.languages.registerColorProvider({ language: LANGUAGE_ID }, colorProvider),
+    vscode.languages.registerHoverProvider({ language: LANGUAGE_ID }, createHoverProvider(context.extensionUri)),
     vscode.workspace.onDidChangeConfiguration(event => {
       if (
         event.affectsConfiguration(`${SECTION}.enabled`) ||

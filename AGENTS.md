@@ -15,6 +15,7 @@ Node 24.18.0 through nodenv (`.node-version`), pnpm 11.17.0 through Corepack (`p
 | `pnpm package`             | `pnpm run ci`, then `vsce package --no-dependencies` into `staple-vscode-<version>.vsix`. |
 | `pnpm deploy`              | `pnpm package`, then installs the vsix into VS Code. Reload the window afterwards.        |
 | `pnpm fix`                 | Lint fixes plus formatting. Use it instead of hand-fixing.                                |
+| `pnpm generate:ghostty`    | Rewrites `languages/ghostty/reference/` from the installed Ghostty. Run after an upgrade. |
 | `pnpm check-commit <file>` | commitlint over a commit message file. The `commit-msg` hook calls it.                    |
 
 `ci` is the one script that has to be invoked as `pnpm run ci`. `pnpm ci` is a pnpm builtin, an alias of `clean-install`, so the bare form silently deletes `node_modules` and reinstalls instead of running the gates. Every other script name here is free of a builtin and either form works.
@@ -39,7 +40,7 @@ TOML is the one out-of-process feature and the reason there are three esbuild en
 - `@types/vscode` must never exceed `engines.vscode`, or code compiles against APIs missing from the oldest editor the extension claims to support. It is pinned with `~` for that reason; raise both together and only for an API that forces it.
 - `.vscodeignore` is an allowlist: `**` excluded, then `!` for what ships. A new shipped directory has to be added there or it silently misses the vsix.
 - Every setting a feature reads is declared in `contributes.configuration` with the same default the code falls back to. A default that disagrees with the code is a bug, not a preference.
-- Never write to a user's settings without a setting that governs it. `ghostty-syntax.ts` is the only feature that does, it touches only globs it added itself, and `staple.ghosttySyntax.autoAssociations` turns it off and reverts them.
+- Never write to a user's settings without a setting that governs it. `ghostty-syntax/index.ts` is the only feature that does, it touches only globs it added itself, and `staple.ghosttySyntax.autoAssociations` turns it off and reverts them.
 - oxfmt, oxlint, knip and tsc own formatting and style. Do not restate their rules in review, and do not hand-fix what `pnpm fix` fixes.
 - Conventional commits, enforced by commitlint through the `commit-msg` hook. Commits are signed; never disable signing.
 - No em or en dash in a committed file. No machine-specific absolute path in a committed file.

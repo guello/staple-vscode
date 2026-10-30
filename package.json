@@ -23,6 +23,7 @@
   "scripts": {
     "prepare": "git config core.hooksPath .githooks",
     "build": "node scripts/build.mts",
+    "generate:ghostty": "node scripts/generate-ghostty-reference.mts",
     "check": "pnpm run --parallel \"/^check:/\"",
     "check:format": "oxfmt --check",
     "check:knip": "knip",

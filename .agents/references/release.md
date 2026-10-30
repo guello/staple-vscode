@@ -31,7 +31,7 @@ Manual the first time and not scriptable from here, because it needs an Azure De
 2. Create the `guello` publisher at `marketplace.visualstudio.com/manage`. The `publisher` field in `package.json` already claims that id and has to match exactly.
 3. `pnpm exec vsce login guello`, then `pnpm exec vsce publish --no-dependencies` for a version already bumped, or `vsce publish <major|minor|patch>` to have it bump and tag.
 4. The listing renders `README.md` and the icon from `package.json`. Relative image paths are rewritten against the repository, so a new asset has to be pushed before publishing or it shows as broken.
-5. `THIRD_PARTY_NOTICES.md` ships in the vsix and covers the vendored Ghostty grammar and the Taplo derivation. Any new vendored file gets an entry there in the same commit.
+5. `THIRD_PARTY_NOTICES.md` ships in the vsix and covers the vendored Ghostty grammar, the generated Ghostty reference and the Taplo derivation. Any new vendored file gets an entry there in the same commit.
 6. After the listing is live, add the Marketplace link to the README install section.
 
 Open VSX is a separate registry with its own token and its own `ovsx publish` step. It is not set up and is only worth doing if someone asks for VSCodium support.

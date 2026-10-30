@@ -11,7 +11,7 @@ Every feature exports `activate<Name>(context: vscode.ExtensionContext)`, is cal
 
 Settings are read at the point of use, never captured at activation. Where a setting is scoped per resource or per language, pass the scope: `getConfiguration(SECTION, uri)` in `instant-git-refresh.ts` and `optimize-images.ts`, `{ uri, languageId }` in `toggle-quotes.ts`. Dropping the scope silently ignores workspace and language overrides.
 
-Only pure sibling modules are unit testable, because `scripts/test.mts` replaces `vscode` with an empty object. `task-lists.ts` and `sort-objects-by-key.ts` are the two that carry tests. New logic belongs in that shape or it ships untested.
+Only pure sibling modules are unit testable, because `scripts/test.mts` replaces `vscode` with an empty object. `task-lists.ts`, `sort-objects-by-key.ts` and `ghostty-syntax/reference.ts` are the three that carry tests. New logic belongs in that shape or it ships untested.
 
 The guards below are fixes for defects that actually occurred, several of them in the extensions these features replace. Do not remove one without reproducing the case it covers.
 
@@ -31,6 +31,10 @@ Replaces waiting on `vscode.git`, whose external-change path is a hardcoded 1s d
 - It reads the global value through `inspect()`, never the merged `get()`. The merged value includes workspace and folder keys, and writing it back would copy them into user settings.
 - The `files.update` rejection is swallowed. The setting is unwritable in some remote and restricted profiles, and failing there must not break the rest of activation.
 - The color provider skips a line whose first non-blank character is `#`, so a commented-out theme line gets no swatch. The hex regex still has to run on the rest of the line, since `palette = 0=#1d1f21` puts the color mid-line.
+- The hover reads `languages/ghostty/reference/`, the raw output of `ghostty +show-config --default --docs` and `ghostty +list-actions --docs`, written by `pnpm generate:ghostty`. It is shipped as text and parsed once on the first hover, so the diff after a Ghostty upgrade shows only changes to Ghostty's own docs, and a session with no hover never reads it. Do not hand-edit it; the generator only replaces en and em dashes and trims trailing whitespace.
+- `parseReference()` gives a key with no comment of its own the docs of the key above it, because Ghostty documents `font-family-bold` and its siblings once on `font-family`. A blank line drops pending comment lines: Ghostty prints docs for options it cannot serialize (`link`, `quick-terminal-size`) with no key line, and without the reset they leak into the next option.
+- A keybind action is found after the first `=` that is not followed by `+` or `=`, so a trigger such as `ctrl+==increase_font_size` resolves to the action and not to the key.
+- A failed read of the reference resolves to no hover and is cached. A missing file must not raise an error on every mouse move.
 - Presentations are written back as `#rrggbb`, widening to `#rrggbbaa` only when alpha is below 1. Ghostty accepts both, and always emitting alpha would rewrite every color a user picks.
 
 ## Optimize Images

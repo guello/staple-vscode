@@ -162,6 +162,8 @@ These are recognized in the file explorer before they are opened, because the ex
 
 Hex colors get a swatch and the built-in color picker, including palette entries such as `palette = 0=#1d1f21`. Editing through the picker writes the color back as `#rrggbb` (or `#rrggbbaa` when it has alpha).
 
+Hovering an option shows its documentation and default value, and hovering the action in a `keybind` line shows the documentation of that action. Both link to the matching entry in the Ghostty reference. The docs come from the Ghostty version named in the hover, so an option added in a later release shows no hover.
+
 For a config file kept somewhere else, associate it manually:
 
 ```jsonc
