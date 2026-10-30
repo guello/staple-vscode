@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname } from 'node:path'
 
-import { type Plugin, build } from 'esbuild'
+import { type BuildOptions, type Plugin, build, context } from 'esbuild'
 
 import { generateGithubMarkdown } from './generate-github-markdown.mts'
 
@@ -32,19 +32,21 @@ const taploWasm: Plugin = {
   },
 }
 
-await Promise.all([
-  build({
-    entryPoints,
-    outdir: 'dist',
-    outbase: 'src',
-    bundle: true,
-    external: ['vscode'],
-    format: 'cjs',
-    platform: 'node',
-    target: 'node20',
-    minify: true,
-    plugins: [taploWasm],
-    logLevel: 'info',
-  }),
-  generateGithubMarkdown(),
-])
+const watch = process.argv.includes('--watch')
+
+const options: BuildOptions = {
+  entryPoints,
+  outdir: 'dist',
+  outbase: 'src',
+  bundle: true,
+  external: ['vscode'],
+  format: 'cjs',
+  platform: 'node',
+  target: 'node20',
+  minify: !watch,
+  sourcemap: watch && 'inline',
+  plugins: [taploWasm],
+  logLevel: 'info',
+}
+
+await Promise.all([watch ? (await context(options)).watch() : build(options), generateGithubMarkdown()])

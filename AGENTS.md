@@ -12,6 +12,7 @@ Node 24.18.0 through nodenv (`.node-version`), pnpm 11.17.0 through Corepack (`p
 | `pnpm test`                | esbuild bundles every `src/**/*.test.ts` and runs each bundle on `node:test`.             |
 | `pnpm run ci`              | `pnpm check` then `pnpm test`. The `run` is required, see below.                          |
 | `pnpm build`               | esbuild bundles the three entry points into `dist/` and writes the generated preview CSS. |
+| `pnpm watch`               | Like `pnpm build`, but unminified with inline source maps, and rebuilds on every save.    |
 | `pnpm package`             | `pnpm run ci`, then `vsce package --no-dependencies` into `staple-vscode-<version>.vsix`. |
 | `pnpm deploy`              | `pnpm package`, then installs the vsix into VS Code. Reload the window afterwards.        |
 | `pnpm fix`                 | Lint fixes plus formatting. Use it instead of hand-fixing.                                |
@@ -57,7 +58,7 @@ TOML is the one out-of-process feature and the reason there are three esbuild en
 
 `pnpm check` and `pnpm test` cover the pure logic only. Nothing in the gates touches the VS Code API, so a green `pnpm run ci` says nothing about whether a feature works.
 
-Anything touching `vscode.*` needs the extension loaded: `pnpm deploy` then reload the window, or F5 for an Extension Development Host against the working tree. Check the Extension Host output channel for activation errors, since a throw inside `activate()` is otherwise silent.
+Anything touching `vscode.*` needs the extension loaded. For the edit loop, run `pnpm watch` and open an Extension Development Host on the working tree with `code --extensionDevelopmentPath="$PWD"`, then press `cmd+r` in that window after each rebuild. It overrides the installed copy in that window only. There is no hot reload: the extension host must restart to pick up new code. For a final check in your own windows, `pnpm deploy` then reload the window. Check the Extension Host output channel for activation errors, since a throw inside `activate()` is otherwise silent.
 
 The preview, the TOML server and the Git refresh each need their own check. Open a markdown preview under a light and a dark theme; open and close the last TOML file to confirm the server starts and stops; run a git command in a terminal and watch the Source Control view update.
 
