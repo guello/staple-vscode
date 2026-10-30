@@ -28,6 +28,7 @@ Replaces waiting on `vscode.git`, whose external-change path is a hardcoded 1s d
 ## Ghostty Syntax
 
 - `syncAssociations()` writes to the user's global `files.associations` and is the only place in the extension that touches foreign settings. It adds a glob only when the key is absent, and removes one only when the value is still `ghostty`. A user who repointed a glob keeps their value, and turning `autoAssociations` off reverts only what the extension added.
+- It reads the global value through `inspect()`, never the merged `get()`. The merged value includes workspace and folder keys, and writing it back would copy them into user settings.
 - The `files.update` rejection is swallowed. The setting is unwritable in some remote and restricted profiles, and failing there must not break the rest of activation.
 - The color provider skips a line whose first non-blank character is `#`, so a commented-out theme line gets no swatch. The hex regex still has to run on the rest of the line, since `palette = 0=#1d1f21` puts the color mid-line.
 - Presentations are written back as `#rrggbb`, widening to `#rrggbbaa` only when alpha is below 1. Ghostty accepts both, and always emitting alpha would rewrite every color a user picks.

@@ -17,7 +17,7 @@ const autoAssociationsEnabled = (): boolean => {
 
 const syncAssociations = async (): Promise<void> => {
   const files = vscode.workspace.getConfiguration('files')
-  const current = files.get<Record<string, string>>('associations') ?? {}
+  const current = files.inspect<Record<string, string>>('associations')?.globalValue ?? {}
   const enabled = autoAssociationsEnabled()
 
   const next = { ...current }
